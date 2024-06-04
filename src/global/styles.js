@@ -1,7 +1,8 @@
 export const colors = {
     theme: '#15AB4C',
     button: '#15AB4C',
-    icon: '#676F66'
+    icon: '#676F66',
+    grey3: 'grey',
 }
 export const parameter = {
     header_height: 50,

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, Image, Alert, TouchableOpacity, ScrollView, TextInput } from 'react-native';
+import { Text, View, StyleSheet, Image, Alert, TouchableOpacity, ScrollView, TextInput, Keyboard } from 'react-native';
 import { colors, buttonStyle } from "../../global/styles";
 import { Button, Icon } from "react-native-elements";
 import Header from "../../component/Header";
@@ -18,8 +18,10 @@ export default function SignUp({ navigation }) {
 
     async function signUp(data) {
         const { email, password } = data
+        console.log(email,password)
         try {
             // const user_Credentials = await auth().createUserWithEmailAndPassword(email, password)
+            Keyboard.dismiss
             Alert.alert('Account has been successfully created.')
         } catch (error) {
             if (error.code === 'Email is already in use.') {
@@ -84,7 +86,6 @@ export default function SignUp({ navigation }) {
                 >
                     {(props) =>
                         <View>
-
                             {/* Text Inputs  */}
                             <View style={{ marginTop: 10 }}>
 
@@ -176,7 +177,7 @@ export default function SignUp({ navigation }) {
                                         {props.errors.email}
                                     </Text>
                                 }
-                                {/* Passord */}
+                                {/* Password */}
                                 <View style={styles.textInput2}>
                                     <Animated.View>
                                         <Icon
@@ -223,14 +224,12 @@ export default function SignUp({ navigation }) {
                                 <Text style={styles.text3}> By creating or logging into an account you are</Text>
                                 <View style={styles.view16}>
                                     <Text style={styles.text3}>agreeing with our  </Text>
-                                    {/* onPress={() => { navigation.navigate('Term_condition') }} */}
-                                    <TouchableOpacity onPress={() => { Alert.alert('Term and Condition') }}>
+                                    <TouchableOpacity onPress={() => { navigation.navigate('Term & Conditions') }}>
                                         <Text style={styles.text4}> Terms & Conditions </Text>
                                     </TouchableOpacity>
                                     <Text style={styles.text3}> and </Text>
                                 </View>
-                                {/* onPress={() => { navigation.navigate('Privacy_page') }} */}
-                                <TouchableOpacity onPress={() => { Alert.alert('Term and Condition') }}>
+                                <TouchableOpacity onPress={() => { navigation.navigate('Privacy') }}>
                                     <Text style={styles.text4}> Privacy Policy </Text>
                                 </TouchableOpacity>
                             </View>
@@ -239,7 +238,10 @@ export default function SignUp({ navigation }) {
                                     title='Create my Account'
                                     titleStyle={buttonStyle.buttonTitle}
                                     buttonStyle={buttonStyle.styledButton}
-                                    // onPress={() => { navigation.navigate('Buottom_tab_navigator') }}
+                                    // onPress={() => { Alert.alert('alert') }}
+                                    // onPress={()=>{
+                                    //     // Keyboard.dismiss()
+                                    //     props.handleSubmit}}
                                     onPress={props.handleSubmit}
                                 />
                             </View>
@@ -257,8 +259,7 @@ export default function SignUp({ navigation }) {
                         title='Sign In'
                         buttonStyle={styles.createBtn}
                         titleStyle={styles.cretaeBtnTitle}
-                        // onPress={() => { navigation.navigate('SignIn') }}
-                        onPress={() => { Alert.alert('SignIn') }}
+                        onPress={() => {  navigation.navigate("SignIn")}}
                     />
                 </View>
             </ScrollView>

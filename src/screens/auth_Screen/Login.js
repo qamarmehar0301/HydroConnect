@@ -1,11 +1,11 @@
 import React, { useState, useRef } from "react";
-import { View, StyleSheet, Text, TextInput, Alert, TouchableOpacity, Modal } from "react-native";
+import { View, StyleSheet, Text, TextInput, Alert, TouchableOpacity, Modal, Keyboard, ScrollView } from "react-native";
 import Header from "../../component/Header";
 import { buttonStyle, colors } from "../../global/styles";
 import { Icon, Button, SocialIcon } from "react-native-elements";
 import { Formik } from "formik";
 
-export default function Login() {
+export default function Login({navigation}) {
 
     const [showPassword, setShowPassword] = useState(false);
     const [textInputFoucs, settextInputFoucs] = useState(false);
@@ -29,8 +29,9 @@ export default function Login() {
     async function SignIn(data) {
         try {
             const { email, password } = data; // Destructure email and password from data object
-            Alert.alert('Sign in pressed')
-            console.log(email,password)
+            navigation.navigate('Bottom_Tab_Nagvigator')
+            //  Alert.alert('Sign in ')
+            console.log(email, password)
             // const userCredential = await auth().signInWithEmailAndPassword(email, password);
             // const user = userCredential.user;
             // if (user) {
@@ -48,7 +49,8 @@ export default function Login() {
     }
     return (
         <View>
-            <Header title="Sign-In" />
+            <Header title="Sign-In" navigation={navigation}/>
+            <ScrollView showsVerticalScrollIndicator = {true}>
             <View style={{ marginLeft: '6%', marginTop: '5%' }}>
                 <Text style={styles.title}> Sign-In </Text>
             </View>
@@ -60,7 +62,6 @@ export default function Login() {
             <Formik
                 initialValues={{ email: '', password: '' }}
                 onSubmit={(values) => { SignIn(values) }}
-                // onSubmit={() => { Alert.alert('Sign in pressedd') }}
                 validate={(values) => {
                     const errors = {};
                     if (!values.email) {
@@ -145,7 +146,6 @@ export default function Login() {
                                 titleStyle={buttonStyle.buttonTitle}
                                 buttonStyle={buttonStyle.styledButton}
                                 onPress={props.handleSubmit}
-                            //onPress={() => { Alert.alert('Presssed') }}
                             />
                         </View>
                     </View>
@@ -253,10 +253,10 @@ export default function Login() {
                     title='Create an Account'
                     buttonStyle={styles.createBtn}
                     titleStyle={styles.cretaeBtnTitle}
-                    // onPress={() => { navigation.navigate('SignUp') }}
-                    onPress={() => { Alert.alert('Sign up') }}
+                    onPress={()=>{navigation.navigate("SignUp")}}
                 />
             </View>
+            </ScrollView>
         </View>
     )
 }

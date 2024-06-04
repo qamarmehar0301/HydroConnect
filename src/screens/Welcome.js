@@ -49,7 +49,7 @@ export default function Welcome_Screen({navigation}) {
                         buttonStyle={styles.createBtn}
                         titleStyle={styles.cretaeBtnTitle}
                         // onPress={() => {navigation.navigate('SignIn')}}
-                        onPress={()=>{Alert.alert('Pressed')}}
+                        onPress={()=>{navigation.navigate("SignIn")}}
                     />
                 </View>
                 <View style={{ marginHorizontal: '5%'}}>
@@ -58,7 +58,7 @@ export default function Welcome_Screen({navigation}) {
                         buttonStyle={styles.createBtn}
                         titleStyle={styles.cretaeBtnTitle}
                         // onPress={() => {navigation.navigate('SignUp')}}
-                        onPress={()=>{Alert.alert('Pressed')}}
+                        onPress={()=>{navigation.navigate("SignUp")}}
                     />
                 </View>
             </View>
