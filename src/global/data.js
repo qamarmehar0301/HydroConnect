@@ -4,8 +4,8 @@ export const filterData = [
     { name: "Dairy ", image: require('../assets/dairy.jpg'), id: "2" },
     { name: "Frozen Food  ", image: require('../assets/frozen.jpg'), id: "3" },
     { name: "Meat ", image: require('../assets/meat.jpg'), id: "4" },
-    { name: "Sea Food  ", image: require('../assets/seafood.jpg'), id: "5" },
-    { name: "Pet Food  ", image: require('../assets/pet_food.jpg'), id: "6" },
+    { name: "Pet Food  ", image: require('../assets/pet_food.jpg'), id: "5" },
+    { name: "Sea Food  ", image: require('../assets/seafood.jpg'), id: "6" },
 ]
 
 export const deliveryData = [
