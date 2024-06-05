@@ -104,8 +104,9 @@ export default function DrawerContent(props) {
 
                     </View>
                 </View>
-                <TouchableOpacity style={{ marginTop: '50%', marginBottom: 15 }}>
-                    <DrawerItem
+                
+                <TouchableOpacity style={{ marginTop: '30%', marginBottom: 15 }}>
+                <DrawerItem
                         label='Log Out'
                         labelStyle={{ color: colors.grey3 }}
                         icon={({ color, size, focussed }) => (
