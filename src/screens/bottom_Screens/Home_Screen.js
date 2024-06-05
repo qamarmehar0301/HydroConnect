@@ -8,16 +8,18 @@ import Offer_Card from "../../component/Offer_Card";
 import Home_Swiper from "../../component/Home_Swiper";
 import Promotion_Card from "../../component/Promotion_card";
 import Home_Contact from "../../component/Home_Contact";
+import { useTheme } from "../../component/DarkTheme";
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 
-export default function Home_Screen() {
+export default function Home_Screen({navigation}) {
 
     const [checkIndex, setcheckIndex] = useState("0")
+    const {isDarkMode} = useTheme();
 
     return (
-        <View>
-            <Home_Header />
+        <View style = {{backgroundColor: isDarkMode?  '#000000' : 'white'}}>
+            <Home_Header navigation={navigation}/> 
 
             <ScrollView showsVerticalScrollIndicator={true} style={{ marginBottom: '20%' }}>
                 {/* Slider*/}
@@ -28,7 +30,7 @@ export default function Home_Screen() {
                 {/* Catagory  */}
                 <View style={{ marginVertical: '3%' }}>
                     <View>
-                        <Text style={styles.catagory}> All Catagories </Text>
+                        <Text style={[styles.catagory, {color: isDarkMode?'white':'black'}]}> All Catagories </Text>
                     </View>
 
                     <View style={{ marginHorizontal: '2%' }}>
@@ -41,12 +43,12 @@ export default function Home_Screen() {
                             renderItem={({ item, index }) => (
 
                                 <Pressable onPress={() => { setcheckIndex(item.id) }}>
-                                    <View style={checkIndex === item.id ? { ...styles.selected_catagory_card } : { ...styles.catagory_card }} >
+                                    <View style={checkIndex === item.id ? { ...styles.selected_catagory_card } : { ...styles.catagory_card, backgroundColor: isDarkMode? 'black' : 'grey', borderWidth: 1, borderColor: 'white' }} >
 
                                         <Image source={item.image} style={styles.catagorgy_card_image} />
 
                                         <View style={{ height: '20%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                                            <Text style={checkIndex === item.id ? { ...styles.selected_catagorgy_card_text } : { ...styles.catagorgy_card_text }} > {item.name} </Text>
+                                            <Text style={checkIndex === item.id ? { ...styles.selected_catagorgy_card_text } : { ...styles.catagorgy_card_text, color: isDarkMode? 'white' : 'white' }} > {item.name} </Text>
                                         </View>
                                     </View>
                                 </Pressable>
@@ -58,15 +60,15 @@ export default function Home_Screen() {
                 {/* Free Delivery */}
                 <View>
                     <View>
-                        <Text style={styles.catagory}>Free Delivery Now</Text>
+                        <Text style={[styles.catagory, {color: isDarkMode?'white':'black'}]}>Free Delivery Now</Text>
                     </View>
                     <View>
                         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', marginBottom: '1%' }}>
-                            <Text style={styles.timer_text}> Avaliable till </Text>
+                            <Text style={[styles.timer_text,{color: isDarkMode?'white':'black'}]}> Avaliable till </Text>
                             <CountDown
                                 until={5000}
                                 size={13}
-                                digitStyle={{ backgroundColor: colors.theme, borderRadius: 10 }}
+                                digitStyle={{ backgroundColor: isDarkMode? 'white' : colors.theme , borderRadius: 10 }}
                                 timeToShow={['H', 'M', 'S']}
                             // timeLabels = {{ h: 'Hours ' ,m: 'Min ', s:'Sec'}}
                             />
@@ -96,7 +98,7 @@ export default function Home_Screen() {
                 {/* Promotion  */}
                 <View>
                     <View>
-                        <Text style={styles.catagory}>Highly Rated Stores</Text>
+                        <Text style={[styles.catagory, {color: isDarkMode?'white':'black'}]}>Highly Rated Stores</Text>
                     </View>
                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                         <View style={{ width: SCREEN_WIDTH }}>
@@ -149,7 +151,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     catagory_card: {
-        backgroundColor: 'grey',
+        //backgroundColor: 'grey',
         elevation: 2.5,
         borderRadius: 15,
         height: 140,
@@ -165,7 +167,6 @@ const styles = StyleSheet.create({
     },
     selected_catagorgy_card_text: {
         fontSize: 16,
-        color: 'white',
         fontWeight: 'bold'
     },
     catagorgy_card_text: {

@@ -1,11 +1,13 @@
 import React from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { colors } from "../../global/styles";
 import Header from "../../component/Header";
+import { useTheme } from "../../component/DarkTheme";
 
 const TermsAndConditionsPage = ({ navigation }) => {
+  const { isDarkMode } = useTheme();
+
   return (
-    <View style={styles.container}>
+    <View style={{ ...styles.container, backgroundColor: isDarkMode ? '#000000' : 'white' }}>
       <Header title="Terms & Conditions" navigation={navigation} />
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <Text style={styles.title}>Terms and Conditions</Text>
@@ -73,6 +75,7 @@ const TermsAndConditionsPage = ({ navigation }) => {
           the laws of Pakistan, without regard to its conflict of law
           provisions.
         </Text>
+
       </ScrollView>
     </View>
   );
@@ -81,7 +84,6 @@ const TermsAndConditionsPage = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
   },
   contentContainer: {
     paddingHorizontal: 20,
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: 'black',
+    color: '#708090',
     marginBottom: 10,
   },
   subtitle: {

@@ -2,17 +2,17 @@ import React from "react";
 import { Text, View, StyleSheet } from 'react-native';
 import { useTheme } from "../../component/DarkTheme";
 
-const Order_Screen = () => {
+const Profile_Screen = () => {
   const { isDarkMode } = useTheme();
 
   return (
     <View style={[styles.container, { backgroundColor: isDarkMode ? '#000000' : 'white' }]}>
-      <Text style={styles.text}>Order Now</Text>
+      <Text style={[styles.text , {backgroundColor: isDarkMode ? '#ffffff' : '#0000000  E   '}]}>Profile Screen </Text>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ 
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -25,4 +25,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Order_Screen;
+export default Profile_Screen;

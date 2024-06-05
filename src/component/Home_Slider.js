@@ -1,8 +1,11 @@
 import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity, Alert, Image } from "react-native";
 import { colors } from "../global/styles";
+import { useTheme } from "./DarkTheme";
 
 export default function Home_Slider({OfferBtn, OfferName, OfferPer, OfferImg}) {
+    const {isDarkMode} = useTheme();
+    const styles =  isDarkMode ? darkStyles : lightStyles 
     return (
         <View style={{ justifyContent: "center", alignItems: 'center' }}>
             <View style={styles.slider_card}>
@@ -33,7 +36,7 @@ export default function Home_Slider({OfferBtn, OfferName, OfferPer, OfferImg}) {
     )
 }
 
-const styles = StyleSheet.create({
+const lightStyles = StyleSheet.create({
     slider_card: {
         height: 180, width: '100%',
         backgroundColor: colors.theme,
@@ -68,6 +71,52 @@ const styles = StyleSheet.create({
     btn_text: {
         marginVertical: '6%',
         backgroundColor: 'transparent',
+        borderRadius: 20,
+        alignItems: 'center',
+        borderWidth: 1,
+    },
+
+})
+
+const darkStyles = StyleSheet.create({
+    slider_card: {
+        height: 180, width: '100%',
+        backgroundColor: '#000',
+        borderWidth: 1, 
+        borderColor: 'white',
+        borderRadius: 12,
+        elevation: 4,
+        flexDirection: 'row',
+    },
+    slider_data: {
+        marginVertical: '5%',
+        marginLeft: '7%',
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+        alignItems:'flex-start'
+    },
+    slider_Img: {
+        borderRadius: 100,
+        height: 160,
+        width: 160,
+        borderWidth: 1,
+        borderColor: 'black'
+    },
+    text1: {
+        color: '#fff',
+        fontSize: 22,
+        alignItems: 'center',
+        // paddingLeft: '4%',
+        marginVertical: '3%'
+    },
+    text2: {
+        color: '#fff',
+        fontSize: 35,
+        fontWeight: 'bold'
+    },
+    btn_text: {
+        marginVertical: '6%',
+        backgroundColor: '#fff',
         borderRadius: 20,
         alignItems: 'center',
         borderWidth: 1,

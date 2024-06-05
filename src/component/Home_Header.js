@@ -2,23 +2,30 @@ import React from "react";
 import { Text, View, StyleSheet, Image, Alert } from 'react-native';
 import { colors, parameter } from "../global/styles";
 import { Icon, withBadge } from "react-native-elements";
+import { useTheme } from "./DarkTheme";
 
-export default function Home_Header({navigation}) {
+export default function Home_Header({ navigation }) {
 
     //const BadgeIcon = withBadge(0)(Icon)
     // const pressed = () => {
     //   //  <PushNotification/>
     //   Alert.alert('Pressed')
     // }
+    const { isDarkMode } = useTheme();
+    const styles = isDarkMode ? darkStyles : lightStyles
     return (
+
         <View style={styles.header}>
 
             <View style={{ justifyContent: 'center', alignItems: 'center', marginLeft: '3.5%' }}>
                 <Icon
                     type="material-community"
                     name="menu"
-                    color= 'white'
+                    color='white'
                     size={32}
+                    onPress={() => {
+                        navigation.toggleDrawer()
+                    }}
                 />
             </View>
 
@@ -32,19 +39,35 @@ export default function Home_Header({navigation}) {
                     name="cart"
                     color='white'
                     size={32}
-                    onPress={()=> {Alert.alert('Presssed')}}
+                    onPress={() => { Alert.alert('Presssed') }}
                 />
             </View>
         </View>
+
     )
 }
 
-const styles = StyleSheet.create({
+const lightStyles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         backgroundColor: colors.theme,
         height: parameter.header_height,
         justifyContent: 'space-between'
+    },
+    header_Text: {
+        fontSize: 27,
+        fontWeight: 'bold',
+        color: 'white',
+        fontFamily: "Cinzel Black"
+    }
+})
+
+const darkStyles = StyleSheet.create({
+    header: {
+        flexDirection: 'row',
+        backgroundColor: '#000',
+        height: parameter.header_height,
+        justifyContent: 'space-between',
     },
     header_Text: {
         fontSize: 27,

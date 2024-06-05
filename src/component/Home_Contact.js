@@ -1,7 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity, Alert, Image, Linking } from "react-native";
-import { colors } from "../global/styles";
-import { Icon } from "react-native-elements";
+import { useTheme } from "./DarkTheme";
 
 export default function Home_Contact() {
 
@@ -13,6 +12,9 @@ export default function Home_Contact() {
             .then(() => console.log('WhatsApp opened'))
             .catch((error) => console.error('Error opening WhatsApp', error));
     };
+
+    const {isDarkMode} = useTheme();
+    const styles =  isDarkMode ? darkStyles : lightStyles ; 
     return (
         <View style={{ justifyContent: "center", alignItems: 'center' }}>
             <View style={styles.slider_card}>
@@ -37,7 +39,7 @@ export default function Home_Contact() {
     )
 }
 
-const styles = StyleSheet.create({
+const lightStyles = StyleSheet.create({
     slider_card: {
         height: 180, width: '90%',
         backgroundColor: 'white',
@@ -85,6 +87,81 @@ const styles = StyleSheet.create({
         fontSize: 11,
         fontWeight: '300',
         color: '#000',
+        marginLeft: 20,
+    },
+    button: {
+        width: 150,
+
+        backgroundColor: '#FFF',
+        padding: 5,
+        borderRadius: 100,
+        borderWidth: 1,
+        borderColor: '#4BA26A',
+        flexDirection: 'row',
+        marginTop: 10,
+        textAlign: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 20,
+    },
+    buttonText: {
+        color: '#000',
+        textAlign: 'center',
+        fontWeight: 'bold',
+
+    }
+})
+
+const darkStyles = StyleSheet.create({
+    slider_card: {
+        height: 180, width: '90%',
+        backgroundColor: 'black',
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: 'white',
+        elevation: 4,
+        flexDirection: 'row',
+    },
+    slider_data: {
+        marginVertical: '1%',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    slider_Img: {
+        borderRadius: 100,
+        height: 110,
+        width: 110
+    },
+    text1: {
+        color: 'white',
+        fontSize: 22,
+        alignItems: 'center',
+        // paddingLeft: '4%',
+        marginVertical: '3%'
+    },
+    text2: {
+        color: 'white',
+        fontSize: 35,
+        fontWeight: 'bold'
+    },
+    btn_text: {
+        marginVertical: '6%',
+        backgroundColor: 'transparent',
+        borderRadius: 20,
+        alignItems: 'center',
+        borderWidth: 1,
+    },
+    cardTitle: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#fff',
+        marginLeft: 20,
+    },
+    cardDescription: {
+        fontSize: 11,
+        fontWeight: '300',
+        color: '#fff',
         marginLeft: 20,
     },
     button: {

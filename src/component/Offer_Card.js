@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import { Text, TouchableOpacity, View, StyleSheet, Image, Alert, Animated } from 'react-native';
 import { colors } from "../global/styles";
 import { Icon } from "react-native-elements";
-
+import { useTheme } from "./DarkTheme";
 
 export default function Offer_Card({
     Prd_Image,
@@ -43,7 +43,8 @@ export default function Offer_Card({
         }
     }, [Liked])
 
-
+    const {isDarkMode} = useTheme();
+    const styles =  isDarkMode ? darkStyles : lightStyles 
     return (
         <TouchableOpacity onPress={onPressOffer_Card}>
             <View style={styles.cardView}>
@@ -76,14 +77,14 @@ export default function Offer_Card({
     )
 }
 
-const styles = StyleSheet.create({
+const lightStyles = StyleSheet.create({
     cardView: {
         marginHorizontal: 5,
         borderRadius: 5,
         borderWidth: 0.8,
         height: 180,
         width: 140,
-        backgroundColor: 'white',
+        backgroundColor: 'white'
     },
     image: {
         marginTop: '5%',
@@ -101,15 +102,53 @@ const styles = StyleSheet.create({
         color: 'black',
     },
     price: {
-        fontSize: 17,
+        fontSize: 16,
         fontWeight: 'bold',
         marginTop: 5,
         color: 'black',
     },
     price2: {
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: 'bold',
         marginTop: 5,
         color: 'grey',
+    },
+})
+const darkStyles = StyleSheet.create({
+    cardView: {
+        marginHorizontal: 5,
+        borderRadius: 5,
+        borderWidth: 0.8,
+        height: 180,
+        width: 140,
+        backgroundColor: '#000',
+        borderColor: 'white'
+    },
+    image: {
+        marginTop: '5%',
+        marginHorizontal: '10%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 50,
+        height: 80,
+        width: 100
+    },
+    Name: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        marginTop: 5,
+        color: '#fff',
+    },
+    price: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginTop: 5,
+        color: '#fff',
+    },
+    price2: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginTop: 5,
+        color: '#fff',
     },
 })

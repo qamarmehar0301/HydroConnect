@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View, StyleSheet, Image, Alert, TouchableOpacity, ScrollView, FlatList, Pressable } from 'react-native';
 import { colors } from "../global/styles";
 import { Icon } from "react-native-elements";
-//import { } from "../global/styles";
+import { useTheme } from "./DarkTheme";
 
 export default function Promotion_Card({
     onPresPrm_Card,
@@ -14,6 +14,9 @@ export default function Promotion_Card({
     images,
     distance
 }) {
+
+    const {isDarkMode} = useTheme();
+    const styles = isDarkMode ? darkStyles : lightStyles ;
     return (
         <TouchableOpacity onPress={onPresPrm_Card}>
  
@@ -58,7 +61,7 @@ export default function Promotion_Card({
     )
 }
 
-const styles = StyleSheet.create({
+const lightStyles = StyleSheet.create({
     cardView: {
         marginHorizontal: 5,
         borderRadius: 5,
@@ -93,6 +96,60 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         paddingHorizontal: 10,
         color: colors.grey3
+    },
+    review_container: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        backgroundColor: "rgba(52,52,52,0.3)",
+        padding: 2,
+        alignItems: 'center',
+        borderTopRightRadius: 5,
+        borderBottomEndRadius: 12,
+    },
+    review_text: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginTop: -3
+    }
+})
+const darkStyles = StyleSheet.create({
+    cardView: {
+        marginHorizontal: 5,
+        borderRadius: 5,
+        borderWidth: 0.8,
+        borderColor: 'white'
+    },
+    image: {
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
+        height: 150,
+    },
+    resturantsName: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        marginTop: 5,
+        color: 'white'
+    },
+    distance: {
+        flex: 4,
+        flexDirection: 'row',
+        paddingHorizontal: 5,
+        borderRightColor: 'white',
+        borderRightWidth: 1
+    },
+    Min: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        paddingTop: 5,
+        color: 'white'
+    },
+    business_address: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        paddingHorizontal: 10,
+        color: 'white'
     },
     review_container: {
         position: 'absolute',

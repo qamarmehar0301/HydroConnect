@@ -29,7 +29,7 @@ export default function Login({navigation}) {
     async function SignIn(data) {
         try {
             const { email, password } = data; // Destructure email and password from data object
-            navigation.navigate('Bottom_Tab_Nagvigator')
+            navigation.navigate('Drawer_Navigator')
             //  Alert.alert('Sign in ')
             console.log(email, password)
             // const userCredential = await auth().signInWithEmailAndPassword(email, password);
