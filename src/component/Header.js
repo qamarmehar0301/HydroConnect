@@ -2,11 +2,13 @@ import React from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Image, Alert } from "react-native";
 import { colors, parameter } from "../global/styles";
 import { Icon } from "react-native-elements";
+import { useTheme } from "./DarkTheme";
 
 export default function Header({ title, navigation }) {
 
+    const {isDarkMode}= useTheme();
     return (
-        <View style={styles.header}>
+        <View style={[styles.header,{backgroundColor: isDarkMode ? '#000000' : colors.theme,}]}>
             <TouchableOpacity>
                 <Icon
                     type="material-community"
@@ -23,7 +25,6 @@ export default function Header({ title, navigation }) {
 
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: colors.theme,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-start',

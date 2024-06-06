@@ -8,6 +8,8 @@ import TermsAndConditionsPage from "../screens/auth_Screen/TermCond";
 import { ThemeProvider } from "../component/DarkTheme";
 import { colors } from "../global/styles";
 import Profile_Screen from "../screens/auth_Screen/Profile";
+import Login from "../screens/auth_Screen/Login";
+import CatagoryProduct from '../screens/CatagoryProduct';
 
 const Drawer = createDrawerNavigator();
 
@@ -89,11 +91,11 @@ export default function Drawer_Navigator() {
                     }}
                 />
                 {/* <Drawer.Screen
-                    name="Profile_Screen"
-                    component={Profile_Screen}
+                    name="CatagoryProduct"
+                    component={CatagoryProduct}
                     options={{
                         headerShown: false,
-                        title: 'Profile',
+                        title: 'Catagory Product',
                         drawerIcon: ({ focussed, size }) => (
                             <Icon
                                 type="material-community"

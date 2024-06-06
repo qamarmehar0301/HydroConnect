@@ -51,13 +51,6 @@ export default function AuthStack() {
                         headerShown: false
                     }}
                 />
-                {/* <Auth.Screen
-                name="Bottom_Tab_Nagvigator"
-                component={Bottom_Tab_Nagvigator}
-                options={{
-                    headerShown: false
-                }}
-            /> */}
                 <Auth.Screen
                     name="Drawer_Navigator"
                     component={Drawer_Navigator}

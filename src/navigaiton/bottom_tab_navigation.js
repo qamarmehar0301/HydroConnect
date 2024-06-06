@@ -6,7 +6,8 @@ import Home_Screen from "../screens/bottom_Screens/Home_Screen";
 import Search_Screen from "../screens/bottom_Screens/Search_Screen";
 import Order_Screen from "../screens/bottom_Screens/Order_Screen";
 import Account_Screen from "../screens/bottom_Screens/Account_Screen";
-import { ThemeProvider } from "../component/DarkTheme";
+import Grocery_Products from "../screens/bottom_Screens/Grocery_products";
+import CategoryProducts from '../screens/CatagoryProduct';
 
 const Bottom = createBottomTabNavigator();
 
@@ -40,6 +41,38 @@ export default function Bottom_Tab_Navigator() {
                         tabBarIcon: ({ color, size }) => (
                             <Icon
                                 name="search"
+                                type="material"
+                                size={size}
+                                color={color}
+                            />
+                        )
+                    }}
+                />
+                <Bottom.Screen
+                    name="Grocery Products"
+                    component={Grocery_Products}
+                    options={{
+                        tabBarLabel: 'Grocery ',
+                        headerShown: false,
+                        tabBarIcon: ({ color, size }) => (
+                            <Icon
+                                name="shopping-basket"
+                                type="material"
+                                size={size}
+                                color={color}
+                            />
+                        )
+                    }}
+                />
+                 <Bottom.Screen
+                    name="Category Products"
+                    component={CategoryProducts}
+                    options={{
+                        tabBarLabel: 'Catagory ',
+                        headerShown: false,
+                        tabBarIcon: ({ color, size }) => (
+                            <Icon
+                                name="shopping-basket"
                                 type="material"
                                 size={size}
                                 color={color}

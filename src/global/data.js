@@ -1,21 +1,21 @@
 export const filterData = [
-    { name: "Fruits ", image: require('../assets/fruits.jpg'), id: "0" },
-    { name: "Vegitables ", image: require('../assets/vegetables.jpg'), id: "1" },
-    { name: "Dairy ", image: require('../assets/dairy.jpg'), id: "2" },
-    { name: "Frozen Food  ", image: require('../assets/frozen.jpg'), id: "3" },
-    { name: "Meat ", image: require('../assets/meat.jpg'), id: "4" },
-    { name: "Pet Food  ", image: require('../assets/pet_food.jpg'), id: "5" },
-    { name: "Sea Food  ", image: require('../assets/seafood.jpg'), id: "6" },
+    { name: "Fruits ", catgory: "fruits" ,image: require('../assets/fruits.jpg'), id: "0" },
+    { name: "Vegitables ", catgory: "vegitables", image: require('../assets/vegetables.jpg'), id: "1" },
+    { name: "Dairy ", catgory: "dairy",image: require('../assets/dairy.jpg'), id: "2" },
+    { name: "Frozen Food  ", catgory: "frozenfood",image: require('../assets/frozen.jpg'), id: "3" },
+    { name: "Meat ", catgory: "meat",image: require('../assets/meat.jpg'), id: "4" },
+    { name: "Pet Food  ", catgory: "petfood",image: require('../assets/pet_food.jpg'), id: "5" },
+    { name: "Sea Food  ", catgory: "seafood",image: require('../assets/seafood.jpg'), id: "6" },
 ]
 
 export const deliveryData = [
-    {name: "Onion ", image: "https://shorturl.at/sYEHa", price: "900", id: "0"},
-    {name: "Apple ", image: "https://shorturl.at/Aprqt", price: "1200", id: "1"},
-    {name: "Ginger ", image: "https://cdn.britannica.com/72/140372-050-094484AF/ginger-root.jpg", price: "500", id: "2"},
-    {name: "Mango ", image: "https://i.pinimg.com/736x/e9/57/eb/e957ebe67e74cf98b59a558fa1f73263.jpg", price: "3000", id: "3"},
-    {name: "Egg ", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTx3k7o-hOvGyEr-67qbilx86l5V-xJPAOAOg&s", price: "300", id: "4"},
-    {name: "Mineral Water ", image: "https://i.pinimg.com/originals/f2/09/d5/f209d526d8eb101ea50019a4158685af.jpg", price: "280", id: "5"},
-    {name: "Meat ", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWnWDvfhqzZNvEakJdr7492NMK7MAr9iGS-g&s", price: "1700", id: "6"},
+    {name: "Onion ", image: "https://shorturl.at/sYEHa", category : "vegitables",price: "900", id: "0"},
+    {name: "Apple ", image: "https://shorturl.at/Aprqt", category : "fruits", price: "1200", id: "1"},
+    {name: "Ginger ", image: "https://cdn.britannica.com/72/140372-050-094484AF/ginger-root.jpg", category : "vegitables", price: "500", id: "2"},
+    {name: "Mango ", image: "https://i.pinimg.com/736x/e9/57/eb/e957ebe67e74cf98b59a558fa1f73263.jpg", category : "fruits", price: "3000", id: "3"},
+    {name: "Egg ", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTx3k7o-hOvGyEr-67qbilx86l5V-xJPAOAOg&s", category : "dairy", price: "300", id: "4"},
+    {name: "Mineral Water ", image: "https://i.pinimg.com/originals/f2/09/d5/f209d526d8eb101ea50019a4158685af.jpg", category : "dairy", price: "280", id: "5"},
+    {name: "Meat ", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWnWDvfhqzZNvEakJdr7492NMK7MAr9iGS-g&s", category : "meat", price: "1700", id: "6"},
 ]
 
 export const groceryStoreData = [

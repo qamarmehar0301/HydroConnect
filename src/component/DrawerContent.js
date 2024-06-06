@@ -5,10 +5,9 @@ import { Avatar, Icon } from 'react-native-elements';
 import { colors } from '../global/styles';
 import { useTheme } from './DarkTheme';
 
-export default function DrawerContent(props) {
+export default function DrawerContent(props, { navigation }) {
     const { isDarkMode, toggleTheme } = useTheme();
     const styles = isDarkMode ? darkStyles : lightStyles;
-
     return (
         <View style={styles.container}>
             <DrawerContentScrollView {...props}>
@@ -100,13 +99,12 @@ export default function DrawerContent(props) {
                             value={isDarkMode}
                             onValueChange={toggleTheme}
                         />
-                        {/* <Text style={{ borderWidth: 1, backgroundColor: 'grey', }}> Dark Mode On </Text> */}
-
                     </View>
                 </View>
-                
-                <TouchableOpacity style={{ marginTop: '30%', marginBottom: 15 }}>
-                <DrawerItem
+
+                <TouchableOpacity style={{ marginTop: '30%', marginBottom: 15 }} >
+                    <DrawerItem
+                        onPress={() => { Alert.alert('SignIn') }}
                         label='Log Out'
                         labelStyle={{ color: colors.grey3 }}
                         icon={({ color, size, focussed }) => (
@@ -132,11 +130,9 @@ const lightStyles = StyleSheet.create({
         justifyContent: 'center',
     },
     dataContainer: {
-        backgroundColor:colors.theme, 
-        paddingTop: '5%', 
-        marginTop: -5, 
-        borderBottomWidth: 1, 
-        borderBottomColor: 'white',
+        backgroundColor: colors.theme,
+        paddingTop: '5%',
+        marginTop: -5,
     },
     text: {
         color: '#000000',
@@ -191,10 +187,10 @@ const darkStyles = StyleSheet.create({
         justifyContent: 'center',
     },
     dataContainer: {
-        backgroundColor:'#000000', 
-        paddingTop: '5%', 
-        marginTop: -5, 
-        borderBottomWidth: 1, 
+        backgroundColor: '#000000',
+        paddingTop: '5%',
+        marginTop: -5,
+        borderBottomWidth: 1,
         borderBottomColor: 'grey',
     },
     text: {

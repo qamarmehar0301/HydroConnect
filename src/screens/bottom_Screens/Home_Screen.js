@@ -12,16 +12,24 @@ import { useTheme } from "../../component/DarkTheme";
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 
-export default function Home_Screen({navigation}) {
+export default function Home_Screen({ navigation }) {
 
     const [checkIndex, setcheckIndex] = useState("0")
-    const {isDarkMode} = useTheme();
+    const { isDarkMode } = useTheme();
+
+    const handlePress = (category) => {
+        setcheckIndex(category.id);
+        // navigation.navigate('Category Products', { category: category.name });
+        navigation.navigate('Grocery Products')
+      };
+
 
     return (
-        <View style = {{backgroundColor: isDarkMode?  '#000000' : 'white'}}>
-            <Home_Header navigation={navigation}/> 
-
-            <ScrollView showsVerticalScrollIndicator={true} style={{ marginBottom: '20%' }}>
+        <View style={{ backgroundColor: isDarkMode ? '#000000' : 'white' }}>
+            <ScrollView showsVerticalScrollIndicator={true} stickyHeaderIndices={[0]}>
+                <View>
+                    <Home_Header navigation={navigation} />
+                </View>
                 {/* Slider*/}
                 <View style={{ marginTop: '5%' }}>
                     <Home_Swiper />
@@ -30,7 +38,7 @@ export default function Home_Screen({navigation}) {
                 {/* Catagory  */}
                 <View style={{ marginVertical: '3%' }}>
                     <View>
-                        <Text style={[styles.catagory, {color: isDarkMode?'white':'black'}]}> All Catagories </Text>
+                        <Text style={[styles.catagory, { color: isDarkMode ? 'white' : 'black' }]}> All Catagories </Text>
                     </View>
 
                     <View style={{ marginHorizontal: '2%' }}>
@@ -42,13 +50,13 @@ export default function Home_Screen({navigation}) {
                             extraData={checkIndex}
                             renderItem={({ item, index }) => (
 
-                                <Pressable onPress={() => { setcheckIndex(item.id) }}>
-                                    <View style={checkIndex === item.id ? { ...styles.selected_catagory_card } : { ...styles.catagory_card, backgroundColor: isDarkMode? 'black' : 'grey', borderWidth: 1, borderColor: 'white' }} >
+                                <Pressable  onPress={() => handlePress(item)} >
+                                    <View style={checkIndex === item.id ? { ...styles.selected_catagory_card } : { ...styles.catagory_card, backgroundColor: isDarkMode ? 'black' : 'grey', borderWidth: 1, borderColor: 'white' }} >
 
                                         <Image source={item.image} style={styles.catagorgy_card_image} />
 
                                         <View style={{ height: '20%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                                            <Text style={checkIndex === item.id ? { ...styles.selected_catagorgy_card_text } : { ...styles.catagorgy_card_text, color: isDarkMode? 'white' : 'white' }} > {item.name} </Text>
+                                            <Text style={checkIndex === item.id ? { ...styles.selected_catagorgy_card_text } : { ...styles.catagorgy_card_text, color: isDarkMode ? 'white' : 'white' }} > {item.name} </Text>
                                         </View>
                                     </View>
                                 </Pressable>
@@ -60,15 +68,15 @@ export default function Home_Screen({navigation}) {
                 {/* Free Delivery */}
                 <View>
                     <View>
-                        <Text style={[styles.catagory, {color: isDarkMode?'white':'black'}]}>Free Delivery Now</Text>
+                        <Text style={[styles.catagory, { color: isDarkMode ? 'white' : 'black' }]}>Free Delivery Now</Text>
                     </View>
                     <View>
                         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', marginBottom: '1%' }}>
-                            <Text style={[styles.timer_text,{color: isDarkMode?'white':'black'}]}> Avaliable till </Text>
+                            <Text style={[styles.timer_text, { color: isDarkMode ? 'white' : 'black' }]}> Avaliable till </Text>
                             <CountDown
                                 until={5000}
                                 size={13}
-                                digitStyle={{ backgroundColor: isDarkMode? 'white' : colors.theme , borderRadius: 10 }}
+                                digitStyle={{ backgroundColor: isDarkMode ? 'white' : colors.theme, borderRadius: 10 }}
                                 timeToShow={['H', 'M', 'S']}
                             // timeLabels = {{ h: 'Hours ' ,m: 'Min ', s:'Sec'}}
                             />
@@ -98,7 +106,7 @@ export default function Home_Screen({navigation}) {
                 {/* Promotion  */}
                 <View>
                     <View>
-                        <Text style={[styles.catagory, {color: isDarkMode?'white':'black'}]}>Highly Rated Stores</Text>
+                        <Text style={[styles.catagory, { color: isDarkMode ? 'white' : 'black' }]}>Highly Rated Stores</Text>
                     </View>
                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                         <View style={{ width: SCREEN_WIDTH }}>
@@ -125,7 +133,7 @@ export default function Home_Screen({navigation}) {
 
                 {/* Contact  */}
                 <View>
-                    <Home_Contact/>
+                    <Home_Contact />
                 </View>
             </ScrollView>
         </View>
