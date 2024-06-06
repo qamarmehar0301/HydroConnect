@@ -3,6 +3,7 @@ import { StyleSheet, View, StatusBar } from "react-native";
 import { colors } from "./src/global/styles";
 import RootNavigator from "./src/navigaiton/RootNavigation";
 import { ThemeProvider, useTheme } from "./src/component/DarkTheme";
+import { ToastProvider } from "react-native-toast-notifications";
 
 const AppContent = () => {
   const { isDarkMode } = useTheme();
@@ -19,9 +20,11 @@ const AppContent = () => {
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
+    <ToastProvider>
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
+    </ToastProvider>
   );
 }
 

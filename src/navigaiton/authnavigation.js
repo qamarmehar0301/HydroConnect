@@ -5,10 +5,9 @@ import Login from "../screens/auth_Screen/Login";
 import SignUp from "../screens/auth_Screen/SignUp";
 import Privacy from "../screens/auth_Screen/Privacy";
 import TermCondition from "../screens/auth_Screen/TermCond";
-import Bottom_Tab_Nagvigator from "./bottom_tab_navigation";
 import Drawer_Navigator from "./Drawer_Navigator";
-import { ThemeProvider } from "../component/DarkTheme";
-import Order_Screen from "../screens/bottom_Screens/Order_Screen";
+import Product_Details from "../screens/ProductDetails";
+import CatagoryProduct from "../screens/CatagoryProduct";
 
 const Auth = createNativeStackNavigator();
 
@@ -54,6 +53,20 @@ export default function AuthStack() {
                 <Auth.Screen
                     name="Drawer_Navigator"
                     component={Drawer_Navigator}
+                    options={{
+                        headerShown: false
+                    }}
+                />
+                <Auth.Screen
+                    name="ProductDetials"
+                    component={Product_Details}
+                    options={{
+                        headerShown: false
+                    }}
+                />
+                <Auth.Screen
+                    name="Catagory Product"
+                    component={CatagoryProduct}
                     options={{
                         headerShown: false
                     }}

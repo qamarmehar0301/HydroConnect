@@ -8,7 +8,7 @@ export default function Grocery_Card({
   Prd_Image,
   Prd_Name,
   Prd_Price,
-  onPressOffer_Card
+  onPressGrocery_Card
 }) {
   const index2 = 10;
   const currentValue = new Animated.Value(1);
@@ -46,7 +46,7 @@ export default function Grocery_Card({
   return (
     <View style={styles.cardView}>
       <View style={{ height: '80%', width: '100%' }}>
-        <TouchableOpacity onPress={onPressOffer_Card}>
+        <TouchableOpacity onPress={onPressGrocery_Card}>
           <View style={styles.iconContainer}>
             <Icon
               name={Liked && (index2 == Counter) ? "favorite" : "favorite-border"}
@@ -63,6 +63,7 @@ export default function Grocery_Card({
               source={{ uri: Prd_Image }}
             />
           </View>
+
           <View style={styles.infoContainer}>
             <Text style={styles.Name}> {Prd_Name} </Text>
             <View style={styles.priceContainer}>
@@ -70,6 +71,7 @@ export default function Grocery_Card({
               <Text style={styles.price2}> {Prd_Price} </Text>
             </View>
           </View>
+
         </TouchableOpacity>
       </View>
       <View style={styles.buttonContainer}>
@@ -89,8 +91,8 @@ const lightStyles = StyleSheet.create({
     marginHorizontal: 5,
     borderRadius: 5,
     borderWidth: 0.8,
-    height: 220,
-    width: 150,
+    height: 230,
+    width: 170,
     backgroundColor: 'white',
   },
   imageContainer: {
@@ -160,8 +162,8 @@ const darkStyles = StyleSheet.create({
     borderRadius: 5,
     borderColor: 'white',
     borderWidth: 0.8,
-    height: 220,
-    width: 150,
+    height: 230,
+    width: 170,
     backgroundColor: '#000000',
   },
   imageContainer: {

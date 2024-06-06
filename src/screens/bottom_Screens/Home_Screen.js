@@ -19,10 +19,15 @@ export default function Home_Screen({ navigation }) {
 
     const handlePress = (category) => {
         setcheckIndex(category.id);
-        // navigation.navigate('Category Products', { category: category.name });
-        navigation.navigate('Grocery Products')
+        const cat_name = category.name;
+        navigation.navigate('Catagory Product', { Prd_Catagory: cat_name });
+        //navigation.navigate('Grocery Products')
       };
-
+    
+    const cardPressed = (data) => {
+        const prd_data = data;
+    navigation.navigate('ProductDetials', {productData: prd_data})
+    }
 
     return (
         <View style={{ backgroundColor: isDarkMode ? '#000000' : 'white' }}>
@@ -94,7 +99,7 @@ export default function Home_Screen({ navigation }) {
                                             Prd_Image={item.image}
                                             Prd_Price={item.price}
                                             Prd_Name={item.name}
-                                            onPressOffer_Card={() => { Alert.alert('In Process') }}
+                                            onPressOffer_Card={() => { cardPressed(item) }}
                                         />
                                     </View>
                                 )}
@@ -122,7 +127,7 @@ export default function Home_Screen({ navigation }) {
                                             noOfReviews={item.noOfRewies}
                                             businessAddress={item.businessAddress}
                                             //onPresFood_Card ={() => { navigation.navigate('Rest_Profile_Screen', { id: item.id, resturant: item.resturantsName }) }}
-                                            onPresPrm_Card={() => { Alert.alert('In Process') }}
+                                            onPresPrm_Card={() => { Alert.alert('Future Work') }}
                                         />
                                     </View>
                                 ))

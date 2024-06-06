@@ -64,7 +64,7 @@ export default function Bottom_Tab_Navigator() {
                         )
                     }}
                 />
-                 <Bottom.Screen
+                {/* <Bottom.Screen
                     name="Category Products"
                     component={CategoryProducts}
                     options={{
@@ -79,7 +79,7 @@ export default function Bottom_Tab_Navigator() {
                             />
                         )
                     }}
-                />
+                /> */}
                 <Bottom.Screen
                     name="My_Order"
                     component={Order_Screen}

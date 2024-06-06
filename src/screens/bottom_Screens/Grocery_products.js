@@ -17,6 +17,11 @@ export default function Grocery_Products({ navigation }) {
     seafood: deliveryData.filter(item => item.category === 'seafood'),
   };
 
+  const cardPressed = (data) => {
+    const prd_data = data;
+    navigation.navigate('ProductDetials', {productData: prd_data})
+  }
+
   return (
     <View style={[styles.container, { backgroundColor: isDarkMode ? '#000000' : 'white' }]}>
       <ScrollView stickyHeaderIndices={[0]} style={{ marginBottom: 10 }}>
@@ -40,6 +45,7 @@ export default function Grocery_Products({ navigation }) {
                     Prd_Name={item.name}
                     Prd_Image={item.image}
                     Prd_Price={item.price}
+                    onPressGrocery_Card={() => { cardPressed(item) }}
                   />
                 )}
                 contentContainerStyle={styles.flatListContainer}

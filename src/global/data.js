@@ -1,22 +1,23 @@
 export const filterData = [
-    { name: "Fruits ", catgory: "fruits" ,image: require('../assets/fruits.jpg'), id: "0" },
-    { name: "Vegitables ", catgory: "vegitables", image: require('../assets/vegetables.jpg'), id: "1" },
-    { name: "Dairy ", catgory: "dairy",image: require('../assets/dairy.jpg'), id: "2" },
-    { name: "Frozen Food  ", catgory: "frozenfood",image: require('../assets/frozen.jpg'), id: "3" },
-    { name: "Meat ", catgory: "meat",image: require('../assets/meat.jpg'), id: "4" },
-    { name: "Pet Food  ", catgory: "petfood",image: require('../assets/pet_food.jpg'), id: "5" },
-    { name: "Sea Food  ", catgory: "seafood",image: require('../assets/seafood.jpg'), id: "6" },
-]
+    { name: "Fruits", category: "fruits", image: require('../assets/fruits.jpg'), id: "0" },
+    { name: "Vegetables", category: "vegetables", image: require('../assets/vegetables.jpg'), id: "1" },
+    { name: "Dairy", category: "dairy", image: require('../assets/dairy.jpg'), id: "2" },
+    { name: "Frozen Food", category: "frozenfood", image: require('../assets/frozen.jpg'), id: "3" },
+    { name: "Meat", category: "meat", image: require('../assets/meat.jpg'), id: "4" },
+    { name: "Pet Food", category: "petfood", image: require('../assets/pet_food.jpg'), id: "5" },
+    { name: "Sea Food", category: "seafood", image: require('../assets/seafood.jpg'), id: "6" },
+];
 
 export const deliveryData = [
-    {name: "Onion ", image: "https://shorturl.at/sYEHa", category : "vegitables",price: "900", id: "0"},
-    {name: "Apple ", image: "https://shorturl.at/Aprqt", category : "fruits", price: "1200", id: "1"},
-    {name: "Ginger ", image: "https://cdn.britannica.com/72/140372-050-094484AF/ginger-root.jpg", category : "vegitables", price: "500", id: "2"},
-    {name: "Mango ", image: "https://i.pinimg.com/736x/e9/57/eb/e957ebe67e74cf98b59a558fa1f73263.jpg", category : "fruits", price: "3000", id: "3"},
-    {name: "Egg ", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTx3k7o-hOvGyEr-67qbilx86l5V-xJPAOAOg&s", category : "dairy", price: "300", id: "4"},
-    {name: "Mineral Water ", image: "https://i.pinimg.com/originals/f2/09/d5/f209d526d8eb101ea50019a4158685af.jpg", category : "dairy", price: "280", id: "5"},
-    {name: "Meat ", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWnWDvfhqzZNvEakJdr7492NMK7MAr9iGS-g&s", category : "meat", price: "1700", id: "6"},
-]
+    { name: "Onion", image: "https://shorturl.at/sYEHa", category: "vegetables", price: "900", id: "0" },
+    { name: "Apple", image: "https://shorturl.at/Aprqt", category: "fruits", price: "1200", id: "1" },
+    { name: "Ginger", image: "https://cdn.britannica.com/72/140372-050-094484AF/ginger-root.jpg", category: "vegetables", price: "500", id: "2" },
+    { name: "Mango", image: "https://i.pinimg.com/736x/e9/57/eb/e957ebe67e74cf98b59a558fa1f73263.jpg", category: "fruits", price: "3000", id: "3" },
+    { name: "Egg", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTx3k7o-hOvGyEr-67qbilx86l5V-xJPAOAOg&s", category: "dairy", price: "300", id: "4" },
+    { name: "Water", image: "https://i.pinimg.com/originals/f2/09/d5/f209d526d8eb101ea50019a4158685af.jpg", category: "dairy", price: "280", id: "5" },
+    { name: "Meat", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWnWDvfhqzZNvEakJdr7492NMK7MAr9iGS-g&s", category: "meat", price: "1700", id: "6" },
+];
+
 
 export const groceryStoreData = [
     {name: "GROCERY STORE ", distance: "10", rating: "4.0", noOfRewies: "500", businessAddress: "Islambad G10 Markaz", Image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiwkL_L7CzxALZ1R_QkF9LfB5PKhiFdqIMtg&s", id: "0"},
