@@ -83,6 +83,34 @@ export default function Account_Screen({ navigation }) {
             </View>
 
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('Handle_Cart') }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <View>
+                            <Icon
+                                name="shopping-cart"
+                                type="material"
+                                size={28}
+                                color={isDarkMode ? 'white' : 'black'}
+                                iconStyle={{ marginHorizontal: '5%' }}
+                            />
+                        </View>
+                        <View style={{ marginLeft: 10 }}>
+                            <Text style={styles.text}> My Cart </Text>
+                        </View>
+                    </View>
+                    <View>
+                        <Icon
+                            name="arrow-right-thin"
+                            type="material-community"
+                            size={28}
+                            color={isDarkMode ? 'white' : 'black'}
+                            iconStyle={{ marginHorizontal: '5%' }}
+                        />
+                    </View>
+                </TouchableOpacity>
+            </View>
+
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                 <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('Privacy') }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <View>

@@ -4,13 +4,8 @@ import { colors, parameter } from "../global/styles";
 import { Icon, withBadge } from "react-native-elements";
 import { useTheme } from "./DarkTheme";
 
-export default function Home_Header({ navigation }) {
+export default function Home_Header({ navigation, cartIconPress }) {
 
-    //const BadgeIcon = withBadge(0)(Icon)
-    // const pressed = () => {
-    //   //  <PushNotification/>
-    //   Alert.alert('Pressed')
-    // }
     const { isDarkMode } = useTheme();
     const styles = isDarkMode ? darkStyles : lightStyles
     return (
@@ -39,7 +34,7 @@ export default function Home_Header({ navigation }) {
                     name="cart"
                     color='white'
                     size={32}
-                    onPress={() => { Alert.alert('Presssed') }}
+                    onPress={cartIconPress}
                 />
             </View>
         </View>

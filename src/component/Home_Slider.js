@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, TouchableOpacity, Alert, Image } from "react-na
 import { colors } from "../global/styles";
 import { useTheme } from "./DarkTheme";
 
-export default function Home_Slider({OfferBtn, OfferName, OfferPer, OfferImg}) {
+export default function Home_Slider({OfferBtn, OfferName, OfferPer, OfferImg,onPressBtn}) {
     const {isDarkMode} = useTheme();
     const styles =  isDarkMode ? darkStyles : lightStyles 
     return (
@@ -17,7 +17,7 @@ export default function Home_Slider({OfferBtn, OfferName, OfferPer, OfferImg}) {
                         <Text style={styles.text2}>{OfferPer}% Off </Text>
                     </View>
                     <View >
-                        <TouchableOpacity style={styles.btn_text} onPress={() => { Alert.alert('In Pocess') }}>
+                        <TouchableOpacity style={styles.btn_text} onPress={ onPressBtn }>
                             <Text style={{ color: 'black', fontSize: 20, margin: '2%' }}> {OfferBtn} </Text>
                         </TouchableOpacity>
                     </View>

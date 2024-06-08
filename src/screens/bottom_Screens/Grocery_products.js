@@ -5,12 +5,17 @@ import Header from "../../component/Header";
 import Grocery_Card from "../../component/Grocery_Card";
 import { ScrollView } from "react-native-gesture-handler";
 import { deliveryData } from "../../global/data";
+import { useToast } from "react-native-toast-notifications";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../component/cart/cart_Action";
 
 export default function Grocery_Products({ navigation }) {
   const { isDarkMode } = useTheme();
+  const dispatch = useDispatch();
+  const toast = useToast();
 
   const categories = {
-    vegetables: deliveryData.filter(item => item.category === 'vegitables'),
+    vegetables: deliveryData.filter(item => item.category === 'vegetables'),
     fruits: deliveryData.filter(item => item.category === 'fruits'),
     dairy: deliveryData.filter(item => item.category === 'dairy'),
     meat: deliveryData.filter(item => item.category === 'meat'),
@@ -19,7 +24,19 @@ export default function Grocery_Products({ navigation }) {
 
   const cardPressed = (data) => {
     const prd_data = data;
-    navigation.navigate('ProductDetials', {productData: prd_data})
+    navigation.navigate('ProductDetials', { productData: prd_data })
+  }
+
+  const cartBtnPressed = (product) => {
+    dispatch(addToCart(product));
+
+    toast.show('Product added to cart successfully!', {
+      type: 'success',
+      placement: 'bottom',
+      duration: 3000,
+      style: { ...styles.toastContainer, backgroundColor: isDarkMode ? '#ffffff' : '#000000' },
+      textStyle: { color: isDarkMode ? '#000000' : '#ffffff'},
+    });
   }
 
   return (
@@ -46,6 +63,7 @@ export default function Grocery_Products({ navigation }) {
                     Prd_Image={item.image}
                     Prd_Price={item.price}
                     onPressGrocery_Card={() => { cardPressed(item) }}
+                    onPressCartBtn={() => { cartBtnPressed(item) }}
                   />
                 )}
                 contentContainerStyle={styles.flatListContainer}
@@ -71,5 +89,12 @@ const styles = StyleSheet.create({
   },
   flatListContainer: {
     paddingLeft: '2%',
+  },
+  toastContainer: {
+    padding: 16,
+    borderRadius: 8,
+    marginHorizontal: 16,
+    marginVertical: 70,
+    width: '100%'
   },
 });

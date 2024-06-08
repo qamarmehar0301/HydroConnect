@@ -11,6 +11,12 @@ export default function Search_Screen({ navigation }) {
 
     const { isDarkMode } = useTheme();
     const styles = isDarkMode ? darkStyles : lightStyles ;
+
+    const cardPressed = (data) => {
+        const cat_name = data.name;
+        navigation.navigate('Catagory Product', { Prd_Catagory: cat_name });
+    }
+
     return (
         <View style={styles.container}>
             <Search_Component />
@@ -20,7 +26,7 @@ export default function Search_Screen({ navigation }) {
                 data={filterData}
                 keyExtractor={item => item.id}
                 renderItem={({ item }) => (
-                    <TouchableWithoutFeedback onPress={() => { navigation.navigate('Search_Result', { item: item.name }) }}>
+                    <TouchableWithoutFeedback onPress={() => {cardPressed(item)}}>
                         <View style={styles.imageView}>
                             <ImageBackground
                                 style={styles.image_bg}

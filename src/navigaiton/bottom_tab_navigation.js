@@ -8,6 +8,8 @@ import Order_Screen from "../screens/bottom_Screens/Order_Screen";
 import Account_Screen from "../screens/bottom_Screens/Account_Screen";
 import Grocery_Products from "../screens/bottom_Screens/Grocery_products";
 import CategoryProducts from '../screens/CatagoryProduct';
+import Handle_Cart from "../screens/handleCart";
+import Product_Details from "../screens/ProductDetails";
 
 const Bottom = createBottomTabNavigator();
 
@@ -64,22 +66,22 @@ export default function Bottom_Tab_Navigator() {
                         )
                     }}
                 />
-                {/* <Bottom.Screen
-                    name="Category Products"
-                    component={CategoryProducts}
+                <Bottom.Screen
+                    name="Handle_Cart"
+                    component={Handle_Cart}
                     options={{
-                        tabBarLabel: 'Catagory ',
+                        tabBarLabel: 'Cart ',
                         headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                             <Icon
-                                name="shopping-basket"
+                                name="shopping-cart"
                                 type="material"
                                 size={size}
                                 color={color}
                             />
                         )
                     }}
-                /> */}
+                />
                 <Bottom.Screen
                     name="My_Order"
                     component={Order_Screen}

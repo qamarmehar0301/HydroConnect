@@ -8,6 +8,7 @@ import TermCondition from "../screens/auth_Screen/TermCond";
 import Drawer_Navigator from "./Drawer_Navigator";
 import Product_Details from "../screens/ProductDetails";
 import CatagoryProduct from "../screens/CatagoryProduct";
+import Handle_Cart from "../screens/handleCart";
 
 const Auth = createNativeStackNavigator();
 
@@ -67,6 +68,13 @@ export default function AuthStack() {
                 <Auth.Screen
                     name="Catagory Product"
                     component={CatagoryProduct}
+                    options={{
+                        headerShown: false
+                    }}
+                />
+                <Auth.Screen
+                    name="Handle_Cart"
+                    component={Handle_Cart}
                     options={{
                         headerShown: false
                     }}

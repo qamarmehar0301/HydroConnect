@@ -8,7 +8,8 @@ export default function Grocery_Card({
   Prd_Image,
   Prd_Name,
   Prd_Price,
-  onPressGrocery_Card
+  onPressGrocery_Card,
+  onPressCartBtn
 }) {
   const index2 = 10;
   const currentValue = new Animated.Value(1);
@@ -79,7 +80,7 @@ export default function Grocery_Card({
           title="Add to Cart"
           buttonStyle={styles.card_Btn}
           titleStyle={styles.title_Btn}
-          onPress={() => { Alert.alert('Added to Cart!') }}
+          onPress={onPressCartBtn}
         />
       </View>
     </View>

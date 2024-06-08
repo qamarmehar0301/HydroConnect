@@ -21,23 +21,24 @@ export default function Home_Screen({ navigation }) {
         setcheckIndex(category.id);
         const cat_name = category.name;
         navigation.navigate('Catagory Product', { Prd_Catagory: cat_name });
-        //navigation.navigate('Grocery Products')
-      };
-    
+    };
+
     const cardPressed = (data) => {
         const prd_data = data;
-    navigation.navigate('ProductDetials', {productData: prd_data})
+        navigation.navigate('ProductDetials', { productData: prd_data })
     }
-
+    const cartIconpressed = (cartData) => {
+       navigation.navigate('Handle_Cart')
+    }
     return (
         <View style={{ backgroundColor: isDarkMode ? '#000000' : 'white' }}>
             <ScrollView showsVerticalScrollIndicator={true} stickyHeaderIndices={[0]}>
                 <View>
-                    <Home_Header navigation={navigation} />
+                    <Home_Header navigation={navigation} cartIconPress={ cartIconpressed } />
                 </View>
                 {/* Slider*/}
                 <View style={{ marginTop: '5%' }}>
-                    <Home_Swiper />
+                    <Home_Swiper navigation={navigation}/>
                 </View>
 
                 {/* Catagory  */}
@@ -55,7 +56,7 @@ export default function Home_Screen({ navigation }) {
                             extraData={checkIndex}
                             renderItem={({ item, index }) => (
 
-                                <Pressable  onPress={() => handlePress(item)} >
+                                <Pressable onPress={() => handlePress(item)} >
                                     <View style={checkIndex === item.id ? { ...styles.selected_catagory_card } : { ...styles.catagory_card, backgroundColor: isDarkMode ? 'black' : 'grey', borderWidth: 1, borderColor: 'white' }} >
 
                                         <Image source={item.image} style={styles.catagorgy_card_image} />

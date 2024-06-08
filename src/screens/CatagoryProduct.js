@@ -4,10 +4,15 @@ import { useTheme } from '../component/DarkTheme';
 import Grocery_Card from '../component/Grocery_Card';
 import { deliveryData } from '../global/data';
 import Header from '../component/Header';
+import { useToast } from "react-native-toast-notifications";
+import { useDispatch } from "react-redux";
+import { addToCart } from '../component/cart/cart_Action';
 
 const CategoryProducts = ({ route, navigation }) => {
     const { Prd_Catagory } = route.params;
     const { isDarkMode } = useTheme();
+    const dispatch = useDispatch();
+    const toast = useToast();
 
     const lowerCaseCategory = Prd_Catagory.toLowerCase();
     const filteredProducts = deliveryData.filter(item => item.category.toLowerCase() === lowerCaseCategory);
@@ -16,6 +21,17 @@ const CategoryProducts = ({ route, navigation }) => {
     const cardPressed = (data) => {
         const prd_data = data;
         navigation.navigate('ProductDetials', { productData: prd_data })
+    }
+    const cartBtnPressed = (product) => {
+        dispatch(addToCart(product));
+
+        toast.show('Product added to cart successfully!', {
+            type: 'success',
+            placement: 'bottom',
+            duration: 3000,
+            style: { ...styles.toastContainer, backgroundColor: isDarkMode ? '#ffffff' : '#000000' },
+            textStyle: { color: isDarkMode ? '#000000' : '#ffffff' },
+        });
     }
 
     return (
@@ -38,6 +54,7 @@ const CategoryProducts = ({ route, navigation }) => {
                                     Prd_Image={item.image}
                                     Prd_Price={item.price}
                                     onPressGrocery_Card={() => { cardPressed(item) }}
+                                    onPressCartBtn={() => { cartBtnPressed(item) }}
                                 />
                             </View>
                         )}
@@ -59,6 +76,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginVertical: 10,
         marginLeft: 10
+    },
+    toastContainer: {
+        padding: 16,
+        borderRadius: 8,
+        marginHorizontal: 16,
+        marginVertical: 70,
+        width: '100%'
     },
 });
 

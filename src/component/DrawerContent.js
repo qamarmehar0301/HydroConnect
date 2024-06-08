@@ -10,7 +10,7 @@ export default function DrawerContent(props, { navigation }) {
     const styles = isDarkMode ? darkStyles : lightStyles;
     return (
         <View style={styles.container}>
-            <DrawerContentScrollView {...props}>
+            <DrawerContentScrollView {...props} style ={{flex: 1}}>
                 <View style={styles.dataContainer}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
                         <Avatar
@@ -101,8 +101,8 @@ export default function DrawerContent(props, { navigation }) {
                         />
                     </View>
                 </View>
-
-                <TouchableOpacity style={{ marginTop: '30%', marginBottom: 15 }} >
+              
+                <TouchableOpacity style={{ marginTop: '15%' , marginBottom: 0 }} >
                     <DrawerItem
                         onPress={() => { Alert.alert('SignIn') }}
                         label='Log Out'
@@ -117,7 +117,8 @@ export default function DrawerContent(props, { navigation }) {
                         )}
                     />
                 </TouchableOpacity>
-            </DrawerContentScrollView>
+                </DrawerContentScrollView>
+            
         </View>
     );
 }

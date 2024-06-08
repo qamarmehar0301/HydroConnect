@@ -4,6 +4,8 @@ import { colors } from "./src/global/styles";
 import RootNavigator from "./src/navigaiton/RootNavigation";
 import { ThemeProvider, useTheme } from "./src/component/DarkTheme";
 import { ToastProvider } from "react-native-toast-notifications";
+import store from "./src/component/cart/cart_store";
+import { Provider } from "react-redux";
 
 const AppContent = () => {
   const { isDarkMode } = useTheme();
@@ -20,11 +22,13 @@ const AppContent = () => {
 
 export default function App() {
   return (
-    <ToastProvider>
-      <ThemeProvider>
-        <AppContent />
-      </ThemeProvider>
-    </ToastProvider>
+    <Provider store={store}>
+      <ToastProvider>
+        <ThemeProvider>
+          <AppContent />
+        </ThemeProvider>
+      </ToastProvider>
+    </Provider>
   );
 }
 

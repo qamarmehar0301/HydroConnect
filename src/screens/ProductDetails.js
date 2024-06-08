@@ -4,21 +4,29 @@ import Header from "../component/Header";
 import { useTheme } from "../component/DarkTheme";
 import { colors } from "../global/styles";
 import {useToast}  from "react-native-toast-notifications";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../component/cart/cart_Action";
 
 export default function Product_Details({ route, navigation }) {
     const { productData } = route.params;
     const { isDarkMode } = useTheme();
+    const dispatch = useDispatch();
     const toast = useToast();
 
-    const handleAddToCart = () => {
+
+    const handleAddToCart = (product) => {
+        dispatch(addToCart(product));
+        
         toast.show('Product added to cart successfully!', {
             type: 'success',
             placement: 'bottom',
-            duration: 3000,
+            duration: 1500,
             style: {...styles.toastContainer, backgroundColor: isDarkMode? '#ffffff' : '#000000'},
             textStyle: {color: isDarkMode? '#000000'  : '#ffffff' },
-        })
-    }
+        });
+
+        // navigation.navigate('Handle_Cart');
+    };
 
     return (
         <View style={[styles.container, { backgroundColor: isDarkMode ? '#000000' : 'white' }]}>
@@ -37,7 +45,7 @@ export default function Product_Details({ route, navigation }) {
                     <Text style={[styles.price, { color: isDarkMode ? 'white' : 'black' }]}>Rs: {productData.price.toString()}</Text>
                 </View>
                 <View style={styles.categoryContainer}>
-                    <Text style={[styles.text, { color: isDarkMode ? 'white' : 'black' }]}>This is Product Tag Line. </Text>
+                    <Text style={[styles.text, { color: isDarkMode ? 'white' : 'black' }]}>{productData.tagline} </Text>
                 </View>
                 <View style={styles.categoryContainer}>
                     <Text style={[styles.categoryTitle, { color: isDarkMode ? 'white' : 'black' }]}>Category: </Text>
@@ -45,17 +53,14 @@ export default function Product_Details({ route, navigation }) {
                 </View>
                 <View style={styles.quantityContainer}>
                     <Text style={[styles.quantityTitle, { color: isDarkMode ? 'white' : 'black' }]}>Available Stock: </Text>
-                    <Text style={[styles.quantity, { color: isDarkMode ? 'white' : colors.theme }]}>5000kg </Text>
+                    <Text style={[styles.quantity, { color: isDarkMode ? 'white' : colors.theme }]}>{productData.stock} </Text>
                 </View>
                 <View style={styles.descriptionContainer}>
                     <Text style={[styles.descriptionTitle, { color: isDarkMode ? 'white' : 'black' }]}>Description: </Text>
-                    <Text style={[styles.descriptionText, { color: isDarkMode ? 'white' : 'black' }]}>This is the Product Description. And bla bla lbalalba jabd
-                        hdsavbfsab  jhdfbans   hjas dffjhcasd djnbiu afndsahhfb
-                        nfsbnjfbsdn  jd vjh as dsnv h  vjajsdbnvn  kjsjdnfkj as h vn sdajb vjhsa vhjbaddjb  jasbdbfsajld jibdasl vcdjlas vdcjl nasndbx cjasdsbdfjnv asdasjdvbfjbj ihihasd vjch a sdih contentContainerStyle</Text>
+                    <Text style={[styles.descriptionText, { color: isDarkMode ? 'white' : 'black' }]}>{productData.description}</Text>
                 </View>
                 <View style={styles.addbuttonContainer}>
-                    <TouchableOpacity style={[styles.addbutton, {backgroundColor: isDarkMode ? '#ffffff' : colors.theme}]} onPress={() => handleAddToCart()}>
-
+                    <TouchableOpacity style={[styles.addbutton, {backgroundColor: isDarkMode ? '#ffffff' : colors.theme}]} onPress={() => handleAddToCart(productData)}>
                         <Text style={[styles.buttonText,{color: isDarkMode ? '#000000' : '#ffffff'}]}>Add to Cart</Text>
                     </TouchableOpacity>
                 </View>
@@ -151,7 +156,6 @@ const styles = StyleSheet.create({
         height: 45,
         flexShrink: 0,
         borderRadius: 28.5,
-        //backgroundColor: colors.theme,
         shadowColor: 'rgba(254, 114, 76, 0.25)',
         shadowOffset: { width: 0, height: 8 },
         shadowRadius: 30,
@@ -160,7 +164,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     buttonText: {
-       // color: '#FFF',
         fontFamily: 'Alatsi',
         fontSize: 15,
         fontStyle: 'normal',
