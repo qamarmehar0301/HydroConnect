@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "165036286443",
+    "project_id": "hydoconnect",
+    "storage_bucket": "hydoconnect.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:165036286443:android:1d5d392795db5e1d0e79ae",
+        "android_client_info": {
+          "package_name": "com.hydroconnect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFkJobNe4R8sBCShpP16Xt72tQ5faUjnU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

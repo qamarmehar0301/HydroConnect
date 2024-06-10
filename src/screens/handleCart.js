@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useRef, useEffect} from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { Text, View, StyleSheet, TouchableOpacity, FlatList, Alert, ScrollView, Image } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, FlatList, Alert, ScrollView, Image, Animated } from 'react-native';
 import { useTheme } from "../component/DarkTheme";
 import Header from "../component/Header";
 import { colors } from "../global/styles";
@@ -12,6 +12,24 @@ export default function Handle_Cart({ navigation }) {
     const cartItems = useSelector(state => state.cart.cartItems);
     const dispatch = useDispatch();
     const { isDarkMode } = useTheme();
+    const slideAnim = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(slideAnim, {
+                    toValue: 1,
+                    duration: 5000,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(slideAnim, {
+                    toValue: 0,
+                    duration: 0,
+                    useNativeDriver: true,
+                }),
+            ])
+        ).start();
+    }, [slideAnim]);
 
     const handleRemoveItem = (id) => {
         Alert.alert(
@@ -56,6 +74,9 @@ export default function Handle_Cart({ navigation }) {
     return (
         <View style={[styles.container, { backgroundColor: isDarkMode ? '#000000' : '#FFFFFF' }]}>
             <Header title="My Cart" navigation={navigation} />
+            <Animated.View style={[styles.slideContainer, { transform: [{ translateY: slideAnim }] }]}>
+                <Text style={styles.slideText}>Delivery should be 200 on every order.  </Text>
+            </Animated.View>
             {cartItems.length > 0 ? (
                 <>
                     <View style={{ flex: 1 }}>
@@ -264,5 +285,14 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         color: 'black'
     },
-
+    slideContainer: {
+        height: 20,
+        width: '100%',
+        backgroundColor: 'red',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    slideText: {
+        color: 'white'
+    }
 });

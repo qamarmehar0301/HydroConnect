@@ -5,12 +5,14 @@ import { Button, Icon } from "react-native-elements";
 import Header from "../../component/Header";
 import { Animated } from "react-native";
 import { Formik } from 'formik'
+import { Picker } from "@react-native-picker/picker";
 
 export default function SignUp({ navigation }) {
 
     const initialValues = { name: '', mobile_no: '', address: '', email: '', password: '' }
     const [textInputFoucs, settextInputFoucs] = useState(false)
     const [showPassword, setShowPassword] = useState(false);
+    const [selectedRole, setSelectedRole] = useState();
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -18,7 +20,7 @@ export default function SignUp({ navigation }) {
 
     async function signUp(data) {
         const { email, password } = data
-        console.log(email,password)
+        console.log(email, password)
         try {
             // const user_Credentials = await auth().createUserWithEmailAndPassword(email, password)
             Keyboard.dismiss
@@ -43,7 +45,7 @@ export default function SignUp({ navigation }) {
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <Header title="Sign Up" navigation={navigation} />
-            <ScrollView stickyHeaderIndices={[0]} showsVerticalScrollIndicator={true}>
+            <ScrollView  showsVerticalScrollIndicator={true} style = {{flex: 1, marginBottom: 10}}>
                 <View style={{ backgroundColor: 'white' }}>
                     <View style={{ marginLeft: '4%', marginTop: '3%' }}>
                         <Text style={styles.title}> Sign Up </Text>
@@ -177,6 +179,32 @@ export default function SignUp({ navigation }) {
                                         {props.errors.email}
                                     </Text>
                                 }
+                                {/* Picker */}
+                                <View style={styles.PickerContainer}>
+                                    <View style={styles.labelPickerContainer}>
+                                        <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+
+                                            <Animated.View>
+                                                <Icon
+                                                    name="lock"
+                                                    type='material'
+                                                    iconStyle={{ color: 'grey' }}
+                                                />
+                                            </Animated.View>
+                                            <Text style={styles.label}>Pick your Role: </Text>
+                                        </View>
+                                        <View style={styles.pickerCon1}>
+                                        <Picker
+                                            selectedValue={selectedRole}
+                                            onValueChange={(itemValue, itemIndex) => setSelectedRole(itemValue)}
+                                            style={styles.picker}
+                                        >
+                                            <Picker.Item label="Buyer" value="buyer" />
+                                            <Picker.Item label="Seller" value="seller" />
+                                        </Picker>
+                                        </View>
+                                    </View>
+                                </View>
                                 {/* Password */}
                                 <View style={styles.textInput2}>
                                     <Animated.View>
@@ -238,10 +266,6 @@ export default function SignUp({ navigation }) {
                                     title='Create my Account'
                                     titleStyle={buttonStyle.buttonTitle}
                                     buttonStyle={buttonStyle.styledButton}
-                                    // onPress={() => { Alert.alert('alert') }}
-                                    // onPress={()=>{
-                                    //     // Keyboard.dismiss()
-                                    //     props.handleSubmit}}
                                     onPress={props.handleSubmit}
                                 />
                             </View>
@@ -259,7 +283,7 @@ export default function SignUp({ navigation }) {
                         title='Sign In'
                         buttonStyle={styles.createBtn}
                         titleStyle={styles.cretaeBtnTitle}
-                        onPress={() => {  navigation.navigate("SignIn")}}
+                        onPress={() => { navigation.navigate("SignIn") }}
                     />
                 </View>
             </ScrollView>
@@ -310,6 +334,40 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingLeft: 15,
         color: 'black',
+    },
+    PickerContainer: {
+        flex: 1,
+        borderWidth: 1,
+        borderColor: '#86939e',
+        marginHorizontal: '6%',
+        marginBottom: '5%',
+        borderRadius: 12,
+        
+    },
+    labelPickerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 15,
+       
+    },
+    label: {
+        fontSize: 13,
+        color: 'grey',
+        marginRight: '20%'
+    },
+    picker: {
+        height: 40,
+        width: 150,
+        color: 'black',
+    },
+    pickerCon1:{
+        backgroundColor: '#86939e', 
+        borderTopRightRadius: 12,
+        borderBottomRightRadius: 12,
+        height: 40, 
+        width: 150, 
+        alignItems: 'center', 
+        justifyContent :'center'
     },
     textInput1: {
         borderWidth: 1,
