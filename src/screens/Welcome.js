@@ -1,10 +1,49 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, View, StyleSheet, Image, Alert } from 'react-native';
 import { Button } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
-import { buttonStyle, colors } from '../global/styles';
+import { colors } from '../global/styles';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
-export default function Welcome_Screen({navigation}) {
+export default function Welcome_Screen({ navigation }) {
+
+    // useEffect(() => {
+    //     const unsubscribe = auth().onAuthStateChanged(user => {
+    //         if (user) {
+    //             // User is signed in, navigate to relevant page
+    //             navigateToRelevantPage(user.uid);
+    //         } else {
+    //             // No user is signed in, navigate to the login screen
+    //             //navigation.replace('Login');
+    //         }
+    //     });
+
+    //     return unsubscribe; // Cleanup function
+    // }, []);
+
+    // const navigateToRelevantPage = async (userId) => {
+    //     try {
+    //         const userDoc = await firestore().collection('users').doc(userId).get();
+    //         if (userDoc.exists) {
+    //             const userData = userDoc.data();
+    //             if (userData.role === 'seller') {
+    //                 console.log('Seller login hi')
+    //                 // navigation.replace('Seller_Home');
+    //             } else if (userData.role === 'buyer') {
+    //                 // navigation.replace('Drawer_Navigator');
+    //                 console.log('Buyer login hi')
+    //             }
+    //         } else {
+    //             console.log('User does not exist.');
+    //             // Handle the case where user data does not exist
+    //         }
+    //     } catch (error) {
+    //         console.error('Error navigating to relevant page:', error);
+    //         // Handle any errors that occur during navigation
+    //     }
+    // };
+
     return (
         <View style={{ flex: 1, backgroundColor: colors.theme }}>
 
@@ -20,45 +59,29 @@ export default function Welcome_Screen({navigation}) {
                         <Image
                             source={{ uri: "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z3JvY2VyeXxlbnwwfHwwfHx8MA%3D%3D" }}
                             style={styles.image}
-                            resizeMode= 'cover'
+                            resizeMode='cover'
                         />
                     </View>
 
-                    {/* <View style={styles.slide}>
-                        <Image
-                            source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7QlN4Ga-JG99c9TdOo9601r9anx6MHm0CkAgW6yeTBHpP70DgkZlzhmgEtrl9jIK9ZRg&usqp=CAU" }}
-                            style={styles.image}
-                            resizeMode="contain"
-                        />
-                    </View>
-                     <View style={styles.slide}>
-                        <Image
-                            source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEKnoUHXOemR8aJByC5qTrdOCO9i143tOdXcOGu1oNEA&s" }}
-                            style={styles.image}
-                            resizeMode="contain"
-                        />
-                    </View>  */}
 
                 </Swiper>
             </View>
-            
-            <View style={{ flex: 4, justifyContent: 'flex-end', marginBottom: '10%'}}>
+
+            <View style={{ flex: 4, justifyContent: 'flex-end', marginBottom: '10%' }}>
                 <View style={{ marginHorizontal: '5%', marginVertical: 20 }}>
                     <Button
                         title='Sign In'
                         buttonStyle={styles.createBtn}
                         titleStyle={styles.cretaeBtnTitle}
-                        // onPress={() => {navigation.navigate('SignIn')}}
-                        onPress={()=>{navigation.navigate("SignIn")}}
+                        onPress={() => { navigation.navigate("SignIn") }}
                     />
                 </View>
-                <View style={{ marginHorizontal: '5%'}}>
+                <View style={{ marginHorizontal: '5%' }}>
                     <Button
                         title='Create an Account'
                         buttonStyle={styles.createBtn}
                         titleStyle={styles.cretaeBtnTitle}
-                        // onPress={() => {navigation.navigate('SignUp')}}
-                        onPress={()=>{navigation.navigate("SignUp")}}
+                        onPress={() => { navigation.navigate("SignUp") }}
                     />
                 </View>
             </View>

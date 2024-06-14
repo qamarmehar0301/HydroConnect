@@ -27,7 +27,7 @@ export default function Home_Screen({ navigation }) {
         const prd_data = data;
         navigation.navigate('ProductDetials', { productData: prd_data })
     }
-    const cartIconpressed = (cartData) => {
+    const cartIconpressed = () => {
        navigation.navigate('Handle_Cart')
     }
     return (

@@ -6,10 +6,12 @@ import Header from "../../component/Header";
 import { Animated } from "react-native";
 import { Formik } from 'formik'
 import { Picker } from "@react-native-picker/picker";
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 export default function SignUp({ navigation }) {
 
-    const initialValues = { name: '', mobile_no: '', address: '', email: '', password: '' }
+    const initialValues = { name: '', mobile_no: '', address: '', email: '', password: '', role: '' }
     const [textInputFoucs, settextInputFoucs] = useState(false)
     const [showPassword, setShowPassword] = useState(false);
     const [selectedRole, setSelectedRole] = useState();
@@ -18,34 +20,51 @@ export default function SignUp({ navigation }) {
         setShowPassword(!showPassword);
     };
 
-    async function signUp(data) {
-        const { email, password } = data
-        console.log(email, password)
+    async function signUp(data, resetForm) {
+
         try {
-            // const user_Credentials = await auth().createUserWithEmailAndPassword(email, password)
             Keyboard.dismiss
+            const { email, password } = data
+
+            //Creating the new user
+            const newUser = await auth().createUserWithEmailAndPassword(email, password)
+            const user2 = newUser.user;
+            const user_id = user2.uid;
+
+            //Creating the Database 
+            const userData = {
+                user_id: user_id,
+                name: data.name,
+                mobile_no: data.mobile_no,
+                address: data.address,
+                email: data.email,
+                role: data.role,
+                password: data.password
+            }
+
+            //Creating Collection for the user 
+            await firestore().collection('users').doc(user_id).set(userData);
             Alert.alert('Account has been successfully created.')
+            //Reset the form
+            resetForm();
+            
         } catch (error) {
-            if (error.code === 'Email is already in use.') {
-                // Alert.alert(
-                //     'That email address is already inuse'
-                // )
+            if (error.code === 'auth/email-already-in-use') {
+                Alert.alert('That email address is already in use!');
             }
+
             if (error.code === 'auth/invalid-email') {
-                Alert.alert(
-                    'That email address is invalid'
-                )
+                Alert.alert('That email address is invalid!');
             }
-            else {
-                Alert.alert(error.code)
-            }
+
+            console.error(error);
         }
     }
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <Header title="Sign Up" navigation={navigation} />
-            <ScrollView  showsVerticalScrollIndicator={true} style = {{flex: 1, marginBottom: 10}}>
+            <ScrollView showsVerticalScrollIndicator={true} style={{ flex: 1, marginBottom: 10 }}>
                 <View style={{ backgroundColor: 'white' }}>
                     <View style={{ marginLeft: '4%', marginTop: '3%' }}>
                         <Text style={styles.title}> Sign Up </Text>
@@ -57,7 +76,7 @@ export default function SignUp({ navigation }) {
 
                 <Formik
                     initialValues={initialValues}
-                    onSubmit={(values) => { signUp(values) }}
+                    onSubmit={(values, { resetForm }) => signUp(values, resetForm)}
                     validate={(values) => {
                         const errors = {};
                         if (!values.name) {
@@ -186,7 +205,7 @@ export default function SignUp({ navigation }) {
 
                                             <Animated.View>
                                                 <Icon
-                                                    name="lock"
+                                                    name="person"
                                                     type='material'
                                                     iconStyle={{ color: 'grey' }}
                                                 />
@@ -194,14 +213,15 @@ export default function SignUp({ navigation }) {
                                             <Text style={styles.label}>Pick your Role: </Text>
                                         </View>
                                         <View style={styles.pickerCon1}>
-                                        <Picker
-                                            selectedValue={selectedRole}
-                                            onValueChange={(itemValue, itemIndex) => setSelectedRole(itemValue)}
-                                            style={styles.picker}
-                                        >
-                                            <Picker.Item label="Buyer" value="buyer" />
-                                            <Picker.Item label="Seller" value="seller" />
-                                        </Picker>
+                                            <Picker
+                                                selectedValue={props.values.role}
+                                                onValueChange={props.handleChange('role')}
+                                                style={styles.picker}
+                                                value={props.values.role}
+                                            >
+                                                <Picker.Item label="Buyer" value="buyer" />
+                                                <Picker.Item label="Seller" value="seller" />
+                                            </Picker>
                                         </View>
                                     </View>
                                 </View>
@@ -342,13 +362,13 @@ const styles = StyleSheet.create({
         marginHorizontal: '6%',
         marginBottom: '5%',
         borderRadius: 12,
-        
+
     },
     labelPickerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingLeft: 15,
-       
+
     },
     label: {
         fontSize: 13,
@@ -360,14 +380,14 @@ const styles = StyleSheet.create({
         width: 150,
         color: 'black',
     },
-    pickerCon1:{
-        backgroundColor: '#86939e', 
+    pickerCon1: {
+        backgroundColor: '#86939e',
         borderTopRightRadius: 12,
         borderBottomRightRadius: 12,
-        height: 40, 
-        width: 150, 
-        alignItems: 'center', 
-        justifyContent :'center'
+        height: 40,
+        width: 150,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     textInput1: {
         borderWidth: 1,

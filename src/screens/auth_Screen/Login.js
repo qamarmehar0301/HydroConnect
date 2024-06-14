@@ -1,261 +1,351 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { View, StyleSheet, Text, TextInput, Alert, TouchableOpacity, Modal, Keyboard, ScrollView } from "react-native";
 import Header from "../../component/Header";
 import { buttonStyle, colors } from "../../global/styles";
 import { Icon, Button, SocialIcon } from "react-native-elements";
 import { Formik } from "formik";
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+//import { SignInContext } from "../../navigaiton/AuthContext";
 
-export default function Login({navigation}) {
+
+GoogleSignin.configure({
+    // Configure your Google sign-in options here
+    // Replace these values with your actual webClientId and other options
+    webClientId: '165036286443-dqeuik771p7rii6ecjunr2kis9f2ogj3.apps.googleusercontent.com',
+  });
+
+export default function Login({ navigation }) {
 
     const [showPassword, setShowPassword] = useState(false);
     const [textInputFoucs, settextInputFoucs] = useState(false);
     const textInput1 = useRef(1);
     const textInput2 = useRef(2);
     const [forgotPasswordModalVisible, setForgotPasswordModalVisible] = useState(false);
+   // const {dispatchSignedIn, signedIn} = useContext(SignInContext)
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
+
     const handleForgotPassword = async (values) => {
-        Alert.alert('Password reset email sent. Check your email inbox.');
-        // try {
-        //     await auth().sendPasswordResetEmail(values.forgot_email);
-        //     Alert.alert('Password reset email sent. Check your email inbox.');
-        //     setForgotPasswordModalVisible(false); // Close the modal after sending the email
-        // } catch (error) {
-        //     Alert.alert('Error sending password reset email:', error.message);
-        // }
-    };
-    async function SignIn(data) {
         try {
-            const { email, password } = data; // Destructure email and password from data object
-            navigation.navigate('Drawer_Navigator')
-            //  Alert.alert('Sign in ')
-            console.log(email, password)
-            // const userCredential = await auth().signInWithEmailAndPassword(email, password);
-            // const user = userCredential.user;
-            // if (user) {
-            //     dispatchSignIn({ type: "UPDATE_SIGN_IN", payload: { userToken: "signed-in" } })
-            // }
+            const { forgot_email } = values;
+
+            const emailExists = await checkEmailExists(forgot_email);
+    
+            if (emailExists) {
+                
+                await auth().sendPasswordResetEmail(forgot_email);
+                Alert.alert('Password reset email sent. Check your email inbox.');
+                setForgotPasswordModalVisible(false); 
+            } else {
+                Alert.alert('Email not found in our records.');
+            }
+        } catch (error) {
+            Alert.alert('Error sending password reset email:', error.message);
+        }
+    };
+    
+    const checkEmailExists = async (email) => {
+        try {
+            const userDoc = await firestore().collection('users').where('email', '==', email).get();
+            return !userDoc.empty;
+        } catch (error) {
+            console.error('Error checking email existence:', error);
+            throw error;
+        }
+    };
+
+    async function SignIn(data, resetForm) {
+        try {
+            const { email, password } = data;
+
+            const userCredentials = await auth().signInWithEmailAndPassword(email, password)
+            const user = userCredentials.user;
+
+            //Fetching the data from the firestore collection
+            const userDoc = await firestore().collection('users').doc(user.uid).get();
+            //Reset the Form
+            resetForm();
+
+            if (userDoc.exists) {
+                const userData = userDoc.data();
+                if (userData.role == 'seller') {
+                    navigation.navigate('Seller_Home')
+                }
+                else if (userData.role == 'buyer') {
+                    navigation.navigate('Drawer_Navigator')
+                }
+                else {
+                    console.log('User Does not Exists.')
+                }
+            }
+
         } catch (error) {
             if (error.code === 'auth/user-not-found') {
-                // Handle the case where the user does not exist
-                Alert.alert('User not found. Please check your email and password.');
+                Alert.alert('No user found with this email!');
+            } else if (error.code === 'auth/wrong-password') {
+                Alert.alert('Incorrect password!');
             } else {
-                // Handle other errors
-                Alert.alert('An error occurred. Please try again later.');
+                console.error(error);
+                Alert.alert('An error occurred. Please try again.');
             }
         }
     }
+
+    // async function SignIn(data, resetForm) {
+    //     try {
+    //         const { email, password } = data;
+
+    //         const userCredentials = await auth().signInWithEmailAndPassword(email, password)
+    //         const user = userCredentials.user;
+
+    //         //Fetching the data from the firestore collection
+    //         const userDoc = await firestore().collection('users').doc(user.uid).get();
+    //         //Reset the Form
+    //         resetForm();
+
+    //         if (userDoc.exists) {
+    //             console.log('Login k time py:', signedIn)
+    //             dispatchSignedIn({type: "UPDATE_SIGN_IN", payload: {userToken: "signedIn"}})
+    //         }
+
+    //     } catch (error) {
+    //         if (error.code === 'auth/user-not-found') {
+    //             Alert.alert('No user found with this email!');
+    //         } else if (error.code === 'auth/wrong-password') {
+    //             Alert.alert('Incorrect password!');
+    //         } else {
+    //             console.error(error);
+    //             Alert.alert('An error occurred. Please try again.');
+    //         }
+    //     }
+    // }
+
+    const signInWithGoogle = async () => {
+        try {
+          const { idToken } = await GoogleSignin.signIn();
+          const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+          await auth().signInWithCredential(googleCredential);
+          //navigation.navigate('Home'); // Navigate to the appropriate screen
+          Alert.alert('Sign in done')
+        } catch (error) {
+          console.error('Google sign-in error:', error);
+          Alert.alert('Error signing in with Google:', error.message);
+        }
+      };
+
     return (
         <View>
-            <Header title="Sign-In" navigation={navigation}/>
-            <ScrollView showsVerticalScrollIndicator = {true}>
-            <View style={{ marginLeft: '6%', marginTop: '5%' }}>
-                <Text style={styles.title}> Sign-In </Text>
-            </View>
-            <View style={{ alignItems: 'center', marginTop: '3%', marginBottom: '8%' }}>
-                <Text style={styles.text1}> Please Enter the Email and Password </Text>
-                <Text style={styles.text1}> registered with your account. </Text>
-            </View>
+            <Header title="Sign-In" navigation={navigation} />
+            <ScrollView showsVerticalScrollIndicator={true}>
+                <View style={{ marginLeft: '6%', marginTop: '5%' }}>
+                    <Text style={styles.title}> Sign-In </Text>
+                </View>
+                <View style={{ alignItems: 'center', marginTop: '3%', marginBottom: '8%' }}>
+                    <Text style={styles.text1}> Please Enter the Email and Password </Text>
+                    <Text style={styles.text1}> registered with your account. </Text>
+                </View>
 
-            <Formik
-                initialValues={{ email: '', password: '' }}
-                onSubmit={(values) => { SignIn(values) }}
-                validate={(values) => {
-                    const errors = {};
-                    if (!values.email) {
-                        errors.email = 'Email is required';
-                    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(values.email)) {
-                        errors.email = 'Enter Proper email';
-                    }
-                    if (!values.password) {
-                        errors.password = 'Password is required';
-                    } else if (values.password.length < 6) {
-                        errors.password = 'Password must be at least 6 characters';
-                    }
-                    return errors;
-                }}
-            >
-
-                {(props) =>
-                    <View>
-                        {/* Input Fields */}
-                        <View style={styles.textInput1}>
-                            <Icon
-                                name="email"
-                                type='material'
-                                iconStyle={{ color: 'grey' }}
-                            />
-                            <TextInput
-                                placeholder='Email'
-                                placeholderTextColor='#86939e'
-                                style={{ width: '80%', color: 'black' }}
-                                ref={textInput1}
-                                onChangeText={props.handleChange('email')}
-                                value={props.values.email}
-                            />
-                        </View>
-                        {props.values.email.length < 1 ? null :
-                            props.errors.email &&
-                            <Text style={{ marginTop: -15, marginLeft: '6%', marginBottom: 10, color: '#D20062' }}>
-                                {props.errors.email}
-                            </Text>
+                <Formik
+                    initialValues={{ email: '', password: '' }}
+                    onSubmit={(values, { resetForm }) => { SignIn(values, resetForm) }}
+                    validate={(values) => {
+                        const errors = {};
+                        if (!values.email) {
+                            errors.email = 'Email is required';
+                        } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(values.email)) {
+                            errors.email = 'Enter Proper email';
                         }
-                        <View style={styles.textInput2}>
-                            <Icon
-                                name="lock"
-                                type='material'
-                                iconStyle={{ color: 'grey' }}
-                            />
-                            <TextInput
-                                placeholder='Password'
-                                placeholderTextColor='#86939e'
-                                style={{ width: '80%', color: 'black' }}
-                                ref={textInput2}
-                                type='password'
-                                onFocus={() => {
-                                    settextInputFoucs(false)
-                                }}
-                                onBlur={() => {
-                                    settextInputFoucs(true)
-                                }}
-                                onChangeText={props.handleChange('password')}
-                                value={props.values.password}
-                                secureTextEntry={!showPassword}
-                            />
-                            <Icon
-                                name={showPassword ? "visibility" : "visibility-off"}
-                                type='material'
-                                iconStyle={{ color: 'grey', paddingRight: 10 }}
-                                style={{ marginRight: '5%' }}
-                                onPress={togglePasswordVisibility}
-                            />
-                        </View>
-                        {props.values.password.length < 1 ? null :
-                            props.errors.password &&
-                            <Text style={{ marginTop: -15, marginLeft: '6%', marginBottom: 10, color: '#D20062' }}>
-                                {props.errors.password}
-                            </Text>
+                        if (!values.password) {
+                            errors.password = 'Password is required';
+                        } else if (values.password.length < 6) {
+                            errors.password = 'Password must be at least 6 characters';
                         }
-
-                        {/* Sign-In Buttons */}
-                        <View style={{ marginHorizontal: '5%', marginVertical: 20 }}>
-                            <Button
-                                title='Sign In'
-                                titleStyle={buttonStyle.buttonTitle}
-                                buttonStyle={buttonStyle.styledButton}
-                                onPress={props.handleSubmit}
-                            />
-                        </View>
-                    </View>
-                }
-            </Formik>
-
-
-            {/* Forgot Password */}
-            <View>
-                <TouchableOpacity style={{ alignItems: 'flex-end' }} onPress={() => { setForgotPasswordModalVisible(true) }} >
-                    <Text style={{ ...styles.text1, textDecorationLine: "underline", marginRight: '5%' }}> Forgot Password? </Text>
-                </TouchableOpacity>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={forgotPasswordModalVisible}
-                    onRequestClose={() => setForgotPasswordModalVisible(false)}
+                        return errors;
+                    }}
                 >
-                    <View style={styles.modalContainer}>
-                        <View style={styles.modalContent}>
-                            <View style={styles.forgot_Text}>
-                                <Text style={styles.modalHeaderText}>Forgot Password?</Text>
+
+                    {(props) =>
+                        <View>
+                            {/* Input Fields */}
+                            <View style={styles.textInput1}>
                                 <Icon
-                                    name="cancel"
+                                    name="email"
                                     type='material'
                                     iconStyle={{ color: 'grey' }}
-                                    onPress={() => setForgotPasswordModalVisible(false)}
+                                />
+                                <TextInput
+                                    placeholder='Email'
+                                    placeholderTextColor='#86939e'
+                                    style={{ width: '80%', color: 'black' }}
+                                    ref={textInput1}
+                                    onChangeText={props.handleChange('email')}
+                                    value={props.values.email}
                                 />
                             </View>
-                            <View style={{ alignItems: 'center', marginTop: '3%' }}>
-                                <Text style={styles.text1}> Please Enter your registered email </Text>
-                                <Text style={styles.text1}> to get the reset link  </Text>
+                            {props.values.email.length < 1 ? null :
+                                props.errors.email &&
+                                <Text style={{ marginTop: -15, marginLeft: '6%', marginBottom: 10, color: '#D20062' }}>
+                                    {props.errors.email}
+                                </Text>
+                            }
+                            <View style={styles.textInput2}>
+                                <Icon
+                                    name="lock"
+                                    type='material'
+                                    iconStyle={{ color: 'grey' }}
+                                />
+                                <TextInput
+                                    placeholder='Password'
+                                    placeholderTextColor='#86939e'
+                                    style={{ width: '80%', color: 'black' }}
+                                    ref={textInput2}
+                                    type='password'
+                                    onFocus={() => {
+                                        settextInputFoucs(false)
+                                    }}
+                                    onBlur={() => {
+                                        settextInputFoucs(true)
+                                    }}
+                                    onChangeText={props.handleChange('password')}
+                                    value={props.values.password}
+                                    secureTextEntry={!showPassword}
+                                />
+                                <Icon
+                                    name={showPassword ? "visibility" : "visibility-off"}
+                                    type='material'
+                                    iconStyle={{ color: 'grey', paddingRight: 10 }}
+                                    style={{ marginRight: '5%' }}
+                                    onPress={togglePasswordVisibility}
+                                />
                             </View>
-                            <Formik
-                                initialValues={{ forgot_email: '' }}
-                                onSubmit={(values) => { handleForgotPassword(values) }}
-                                validate={(values) => {
-                                    const errors = {}
-                                    if (!values.forgot_email) {
-                                        errors.forgot_email = 'Email is required';
-                                    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(values.forgot_email)) {
-                                        errors.forgot_email = 'Enter Proper email';
-                                    }
-                                    return errors;
-                                }}
-                            >
-                                {(props) =>
-                                    <View>
-                                        <View style={styles.forgot_pass_cont}>
+                            {props.values.password.length < 1 ? null :
+                                props.errors.password &&
+                                <Text style={{ marginTop: -15, marginLeft: '6%', marginBottom: 10, color: '#D20062' }}>
+                                    {props.errors.password}
+                                </Text>
+                            }
 
-                                            <Icon
-                                                name="email"
-                                                type='material'
-                                                iconStyle={{ color: 'grey' }}
-                                            />
-
-                                            <TextInput
-                                                placeholder='Email'
-                                                placeholderTextColor='#86939e'
-                                                style={{ width: '80%', color: 'black' }}
-                                                // ref={textInput1}
-                                                onChangeText={props.handleChange('forgot_email')}
-                                                value={props.values.forgot_email}
-                                            />
-                                        </View>
-                                        {props.values.forgot_email.length < 1 ? null :
-                                            props.errors.forgot_email &&
-                                            <Text style={{ marginTop: -15, marginLeft: '6%', marginBottom: 10, color: '#D20062' }}>
-                                                {props.errors.forgot_email}
-                                            </Text>
-                                        }
-                                        <Button
-                                            title="Get the Link"
-                                            // onPress={props.handleSubmit}
-                                            onPress={() => { Alert.alert('Get the link') }}
-                                        />
-                                    </View>}
-                            </Formik>
+                            {/* Sign-In Buttons */}
+                            <View style={{ marginHorizontal: '5%', marginVertical: 20 }}>
+                                <Button
+                                    title='Sign In'
+                                    titleStyle={buttonStyle.buttonTitle}
+                                    buttonStyle={buttonStyle.styledButton}
+                                    onPress={props.handleSubmit}
+                                />
+                            </View>
                         </View>
-                    </View>
-                </Modal>
-            </View>
+                    }
+                </Formik>
 
-            <View style={{ alignItems: 'center', marginTop: '10%', marginBottom: '10%' }}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}> OR </Text>
-            </View>
 
-            {/* Google Button */}
-            <View>
-                <SocialIcon
-                    title='Sign In With Google'
-                    button
-                    type='google'
-                    style={styles.socialButton}
-                    onPress={() => { Alert.alert('In Process') }}
-                />
-            </View>
+                {/* Forgot Password */}
+                <View>
+                    <TouchableOpacity style={{ alignItems: 'flex-end' }} onPress={() => { setForgotPasswordModalVisible(true) }} >
+                        <Text style={{ ...styles.text1, textDecorationLine: "underline", marginRight: '5%' }}> Forgot Password? </Text>
+                    </TouchableOpacity>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={forgotPasswordModalVisible}
+                        onRequestClose={() => setForgotPasswordModalVisible(false)}
+                    >
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                <View style={styles.forgot_Text}>
+                                    <Text style={styles.modalHeaderText}>Forgot Password?</Text>
+                                    <Icon
+                                        name="cancel"
+                                        type='material'
+                                        iconStyle={{ color: 'grey' }}
+                                        onPress={() => setForgotPasswordModalVisible(false)}
+                                    />
+                                </View>
+                                <View style={{ alignItems: 'center', marginTop: '3%' }}>
+                                    <Text style={styles.text1}> Please Enter your registered email </Text>
+                                    <Text style={styles.text1}> to get the reset link  </Text>
+                                </View>
+                                <Formik
+                                    initialValues={{ forgot_email: '' }}
+                                    onSubmit={(values) => { handleForgotPassword(values) }}
+                                    validate={(values) => {
+                                        const errors = {}
+                                        if (!values.forgot_email) {
+                                            errors.forgot_email = 'Email is required';
+                                        } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(values.forgot_email)) {
+                                            errors.forgot_email = 'Enter Proper email';
+                                        }
+                                        return errors;
+                                    }}
+                                >
+                                    {(props) =>
+                                        <View>
+                                            <View style={styles.forgot_pass_cont}>
 
-            <View style={{ marginTop: '4%' }}>
-                <Text style={{ ...styles.text1, marginLeft: '5%' }}> New on HydroConnect? </Text>
-            </View>
+                                                <Icon
+                                                    name="email"
+                                                    type='material'
+                                                    iconStyle={{ color: 'grey' }}
+                                                />
 
-            <View style={{ alignItems: 'flex-end', marginRight: '5%', marginTop: '5%' }}>
-                <Button
-                    title='Create an Account'
-                    buttonStyle={styles.createBtn}
-                    titleStyle={styles.cretaeBtnTitle}
-                    onPress={()=>{navigation.navigate("SignUp")}}
-                />
-            </View>
+                                                <TextInput
+                                                    placeholder='Email'
+                                                    placeholderTextColor='#86939e'
+                                                    style={{ width: '80%', color: 'black' }}
+                                                    // ref={textInput1}
+                                                    onChangeText={props.handleChange('forgot_email')}
+                                                    value={props.values.forgot_email}
+                                                />
+                                            </View>
+                                            {props.values.forgot_email.length < 1 ? null :
+                                                props.errors.forgot_email &&
+                                                <Text style={{ marginTop: -15, marginLeft: '6%', marginBottom: 10, color: '#D20062' }}>
+                                                    {props.errors.forgot_email}
+                                                </Text>
+                                            }
+                                            <Button
+                                                title="Get the Link"
+                                                onPress={props.handleSubmit}
+                                            //onPress={() => { Alert.alert('Get the link') }}
+                                            />
+                                        </View>}
+                                </Formik>
+                            </View>
+                        </View>
+                    </Modal>
+                </View>
+
+                <View style={{ alignItems: 'center', marginTop: '10%', marginBottom: '10%' }}>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}> OR </Text>
+                </View>
+
+                {/* Google Button */}
+                <View>
+                    <SocialIcon
+                        title='Sign In With Google'
+                        button
+                        type='google'
+                        style={styles.socialButton}
+                        onPress={signInWithGoogle   }
+                    />
+                </View>
+
+                <View style={{ marginTop: '4%' }}>
+                    <Text style={{ ...styles.text1, marginLeft: '5%' }}> New on HydroConnect? </Text>
+                </View>
+
+                <View style={{ alignItems: 'flex-end', marginRight: '5%', marginTop: '5%' }}>
+                    <Button
+                        title='Create an Account'
+                        buttonStyle={styles.createBtn}
+                        titleStyle={styles.cretaeBtnTitle}
+                        onPress={() => { navigation.navigate("SignUp") }}
+                    />
+                </View>
             </ScrollView>
         </View>
     )

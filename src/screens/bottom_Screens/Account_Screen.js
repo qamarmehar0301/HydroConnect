@@ -1,14 +1,45 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Text, View, StyleSheet, ScrollView, TextInput, Alert, TouchableOpacity } from 'react-native';
 import { Image } from "react-native-animatable";
 import { colors } from "../../global/styles";
 import { Icon } from 'react-native-elements';
 import { useTheme } from "../../component/DarkTheme";
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore'
+//import { SignInContext } from "../../navigaiton/AuthContext";
 
 export default function Account_Screen({ navigation }) {
 
     const { isDarkMode } = useTheme();
     const styles = isDarkMode ? darkStyles : lightStyles;
+    const [data, setData] = useState(null)
+    // const {dispatchSignedIn} = useContext(SignInContext)
+
+    //Access the Data of the User
+    const thisUser = auth().currentUser;
+    const userID = thisUser?.uid;
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                if (userID) {
+                    const snapshot = await firestore().collection('users')
+                        .where('user_id', '==', userID)
+                        .get();
+                    if (snapshot.empty) {
+                        console.log('No matching documents.');
+                        return;
+                    }
+                    const userData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))[0]; // Assuming only one user document
+                    setData(userData);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, [userID]);
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: isDarkMode ? '#000000' : 'white' }}>
@@ -21,7 +52,7 @@ export default function Account_Screen({ navigation }) {
                         />
                     </View>
                     <View>
-                        <Text style={styles.nameText}> Muhammad Qamar </Text>
+                        <Text style={styles.nameText}> {data?.name || 'No Specific Name'} </Text>
                     </View>
                 </View>
             </View>
@@ -168,7 +199,7 @@ export default function Account_Screen({ navigation }) {
             </View>
 
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('SignIn') }}>
+                <TouchableOpacity style={styles.button} onPress={() => { Alert.alert('Log out') }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 5 }}>
                         <View>
                             <Icon

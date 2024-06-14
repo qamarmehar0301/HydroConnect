@@ -1,12 +1,42 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Image, TextInput } from 'react-native';
 import { useTheme } from "../../component/DarkTheme";
 import Header from '../../component/Header';
 import { colors } from "../../global/styles";
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore'
 
 export default function Profile_Screen({ navigation }) {
   const { isDarkMode } = useTheme();
   const styles = isDarkMode ? darkStyles : lightStyles;
+  const [data, setData] = useState(null)
+
+
+  //Access the Data of the User
+  const thisUser = auth().currentUser;
+  const userID = thisUser?.uid;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (userID) {
+          const snapshot = await firestore().collection('users')
+            .where('user_id', '==', userID)
+            .get();
+          if (snapshot.empty) {
+            console.log('No matching documents.');
+            return;
+          }
+          const userData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))[0]; // Assuming only one user document
+          setData(userData);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [userID]);
 
   return (
     <View style={[styles.container, { backgroundColor: isDarkMode ? '#000000' : 'white' }]}>
@@ -29,8 +59,7 @@ export default function Profile_Screen({ navigation }) {
           Name
         </Text>
         <TextInput
-          placeholder='Muhammad Qamar'
-          placeholderTextColor='#86939e'
+          value={data?.name || 'No Specific Name'}
           style={styles.input}
           editable={false}
         />
@@ -41,8 +70,7 @@ export default function Profile_Screen({ navigation }) {
           Mobile Number
         </Text>
         <TextInput
-          placeholder='03425288079'
-          placeholderTextColor='#86939e'
+          value={data?.mobile_no || 'No Specific Phone Number'}
           style={styles.input}
           editable={false}
         />
@@ -52,8 +80,7 @@ export default function Profile_Screen({ navigation }) {
           E-mail
         </Text>
         <TextInput
-          placeholder='qamarmehar.0301@gmail.com'
-          placeholderTextColor='#86939e'
+          value={data?.email|| 'No Specific Email'}
           style={styles.input}
           editable={false}
         />
@@ -63,8 +90,7 @@ export default function Profile_Screen({ navigation }) {
           Address
         </Text>
         <TextInput
-          placeholder='UET Lahore'
-          placeholderTextColor='#86939e'
+          value={data?.address|| 'No Specific Address'}
           style={styles.input}
           editable={false}
         />

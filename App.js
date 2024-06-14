@@ -6,6 +6,7 @@ import { ThemeProvider, useTheme } from "./src/component/DarkTheme";
 import { ToastProvider } from "react-native-toast-notifications";
 import store from "./src/component/cart/cart_store";
 import { Provider } from "react-redux";
+import { SignInContextProvider } from "./src/navigaiton/AuthContext";
 
 const AppContent = () => {
   const { isDarkMode } = useTheme();
@@ -22,13 +23,15 @@ const AppContent = () => {
 
 export default function App() {
   return (
-    <Provider store={store}>
-      <ToastProvider>
-        <ThemeProvider>
-          <AppContent />
-        </ThemeProvider>
-      </ToastProvider>
-    </Provider>
+    // <SignInContextProvider>
+      <Provider store={store}>
+        <ToastProvider>
+          <ThemeProvider>
+            <AppContent />
+          </ThemeProvider>
+        </ToastProvider>
+      </Provider>
+      // </SignInContextProvider>
   );
 }
 
