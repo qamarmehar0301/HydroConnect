@@ -1,12 +1,14 @@
 import React from "react";
 import { StyleSheet, View, StatusBar } from "react-native";
 import { colors } from "./src/global/styles";
-import RootNavigator from "./src/navigaiton/RootNavigation";
+import RootNavigator from "./src/navigaiton/RootNavigation"
 import { ThemeProvider, useTheme } from "./src/component/DarkTheme";
 import { ToastProvider } from "react-native-toast-notifications";
 import store from "./src/component/cart/cart_store";
 import { Provider } from "react-redux";
-import { SignInContextProvider } from "./src/navigaiton/AuthContext";
+import { SignInContextProvider } from "./src/navigation/AuthContext";
+import { StripeProvider } from "@stripe/stripe-react-native";
+import { SP_KEY } from '@env';
 
 const AppContent = () => {
   const { isDarkMode } = useTheme();
@@ -23,15 +25,21 @@ const AppContent = () => {
 
 export default function App() {
   return (
-    // <SignInContextProvider>
-      <Provider store={store}>
-        <ToastProvider>
-          <ThemeProvider>
-            <AppContent />
-          </ThemeProvider>
-        </ToastProvider>
-      </Provider>
-      // </SignInContextProvider>
+    <StripeProvider
+      publishableKey={SP_KEY}
+      merchantIdentifier="merchant.identifier" // required for Apple Pay
+      urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
+    >
+      {/* <SignInContextProvider> */}
+        <Provider store={store}>
+          <ToastProvider>
+            <ThemeProvider>
+              <AppContent />
+            </ThemeProvider>
+          </ToastProvider>
+        </Provider>
+      {/* </SignInContextProvider> */}
+    </StripeProvider>
   );
 }
 

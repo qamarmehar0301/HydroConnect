@@ -55,8 +55,8 @@ export default function Handle_Cart({ navigation }) {
     }
 
     const handleBuyNow = () => {
-        Alert.alert('Checkout', 'Proceeding to checkout...');
-        // You can add your checkout logic here
+        const totalAmount = calculateTotalPrice()
+        navigation.navigate('Checkout_Screen', {totalAmount})
     };
 
     const handleContinueShopping = () => {
@@ -152,15 +152,8 @@ export default function Handle_Cart({ navigation }) {
                                 <Text style={{ color: isDarkMode ? 'white' : 'black', fontSize: 23 }}> Total Price </Text>
                                 <Text style={{ color: isDarkMode ? 'white' : 'black', fontSize: 20 }}> Pkr: {calculateTotalPrice()} </Text>
                             </View>
-
-                            {/* <Button
-                                title='Buy Now'
-                                buttonStyle={{ backgroundColor: colors.theme, height: 50, marginBottom: 20 }}
-                                titleStyle={{ fontSize: 25 }}
-                                onPress={handleBuyNow}
-                            /> */}
                             <TouchableOpacity style={[styles.buyNowbutton, {backgroundColor: isDarkMode ? '#000000': colors.theme}]} onPress={handleBuyNow}>
-                                <Text style={styles.buynowbuttonText}> Buy Now </Text>
+                                <Text style={styles.buynowbuttonText}> Checkout </Text>
                             </TouchableOpacity>
 
                         </View>
