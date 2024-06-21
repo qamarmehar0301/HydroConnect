@@ -6,14 +6,14 @@ import { Icon } from 'react-native-elements';
 import { useTheme } from "../../component/DarkTheme";
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore'
-//import { SignInContext } from "../../navigaiton/AuthContext";
+import { SignInContext } from "../../navigaiton/Contexts/AuthContext";
 
 export default function Account_Screen({ navigation }) {
 
     const { isDarkMode } = useTheme();
     const styles = isDarkMode ? darkStyles : lightStyles;
     const [data, setData] = useState(null)
-    // const {dispatchSignedIn} = useContext(SignInContext)
+    const { dispatchSignedIn } = useContext(SignInContext)
 
     //Access the Data of the User
     const thisUser = auth().currentUser;
@@ -40,6 +40,23 @@ export default function Account_Screen({ navigation }) {
 
         fetchData();
     }, [userID]);
+
+    const handleLogout = () => {
+        try {
+            auth().
+                signOut().
+                then(
+                    () => {
+                        console.log('User has been Signed out successfully..!!')
+                        // dispatchSignedIn({ type: 'LOGOUT' });
+                        dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: "seller-sign-in" } })
+                    }
+                )
+
+        } catch (error) {
+            alert(error)
+        }
+    }
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: isDarkMode ? '#000000' : 'white' }}>
@@ -199,7 +216,7 @@ export default function Account_Screen({ navigation }) {
             </View>
 
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                <TouchableOpacity style={styles.button} onPress={() => { Alert.alert('Log out') }}>
+                <TouchableOpacity style={styles.button} onPress={handleLogout}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 5 }}>
                         <View>
                             <Icon

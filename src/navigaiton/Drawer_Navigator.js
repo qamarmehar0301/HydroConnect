@@ -15,10 +15,11 @@ import Handle_Cart from "../screens/handleCart";
 const Drawer = createDrawerNavigator();
 
 export default function Drawer_Navigator() {
+
     return (
 
         <Drawer.Navigator
-            drawerContent={props => <DrawerContent {...props} />}
+            drawerContent={(props) => <DrawerContent {...props} />}
         >
             <Drawer.Screen
                 name="Bottom_Tab_Nagvigator"

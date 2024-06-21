@@ -1,10 +1,10 @@
 import React from "react";
 import { Text, View, StyleSheet, Image, Alert } from 'react-native';
-import { colors, parameter } from "../global/styles";
+import { colors, parameter } from "../../global/styles";
 import { Icon, withBadge } from "react-native-elements";
-import { useTheme } from "./DarkTheme";
+import { useTheme } from "../DarkTheme";
 
-export default function Home_Header({ navigation, cartIconPress, onLogoutPress }) {
+export default function Seller_Header({ navigation, cartIconPress, onLogoutPress }) {
 
     const { isDarkMode } = useTheme();
     const styles = isDarkMode ? darkStyles : lightStyles
@@ -28,14 +28,7 @@ export default function Home_Header({ navigation, cartIconPress, onLogoutPress }
                 <Text style={styles.header_Text}> Hydro Connect </Text>
             </View>
 
-            <View style={{ justifyContent: 'center', alignItems: 'center', marginRight: '3.5%' , flexDirection : "row"}}>
-                <Icon
-                    type="material-community"
-                    name="cart"
-                    color='white'
-                    size={32}
-                    onPress={cartIconPress}
-                />
+            <View style={{ justifyContent: 'center', alignItems: 'center', marginRight: '3.5%'}}>
                  <Icon
                     type="material-community"
                     name="close-circle"

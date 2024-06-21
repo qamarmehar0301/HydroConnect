@@ -6,7 +6,7 @@ import { ThemeProvider, useTheme } from "./src/component/DarkTheme";
 import { ToastProvider } from "react-native-toast-notifications";
 import store from "./src/component/cart/cart_store";
 import { Provider } from "react-redux";
-import { SignInContextProvider } from "./src/navigation/AuthContext";
+import { SignInContextProvider } from "./src/navigaiton/Contexts/AuthContext";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import { SP_KEY } from '@env';
 
@@ -30,7 +30,7 @@ export default function App() {
       merchantIdentifier="merchant.identifier" // required for Apple Pay
       urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
     >
-      {/* <SignInContextProvider> */}
+      <SignInContextProvider>
         <Provider store={store}>
           <ToastProvider>
             <ThemeProvider>
@@ -38,7 +38,7 @@ export default function App() {
             </ThemeProvider>
           </ToastProvider>
         </Provider>
-      {/* </SignInContextProvider> */}
+      </SignInContextProvider>
     </StripeProvider>
   );
 }

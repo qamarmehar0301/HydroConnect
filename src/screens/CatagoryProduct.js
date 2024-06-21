@@ -28,7 +28,7 @@ const CategoryProducts = ({ route, navigation }) => {
         toast.show('Product added to cart successfully!', {
             type: 'success',
             placement: 'bottom',
-            duration: 3000,
+            duration: 100,
             style: { ...styles.toastContainer, backgroundColor: isDarkMode ? '#ffffff' : '#000000' },
             textStyle: { color: isDarkMode ? '#000000' : '#ffffff' },
         });

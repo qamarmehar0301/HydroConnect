@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useContext} from "react";
 import { ScrollView, Text, View, FlatList, Pressable, StyleSheet, Image, Alert, Dimensions } from 'react-native';
 import CountDown from 'react-native-countdown-component';
 import { colors } from "../../global/styles";
@@ -9,6 +9,7 @@ import Home_Swiper from "../../component/Home_Swiper";
 import Promotion_Card from "../../component/Promotion_card";
 import Home_Contact from "../../component/Home_Contact";
 import { useTheme } from "../../component/DarkTheme";
+import { SignInContext } from "../../navigaiton/Contexts/AuthContext";
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 
@@ -16,6 +17,7 @@ export default function Home_Screen({ navigation }) {
 
     const [checkIndex, setcheckIndex] = useState("0")
     const { isDarkMode } = useTheme();
+    const {dispatchSignedIn} = useContext(SignInContext)
 
     const handlePress = (category) => {
         setcheckIndex(category.id);
@@ -27,18 +29,25 @@ export default function Home_Screen({ navigation }) {
         const prd_data = data;
         navigation.navigate('ProductDetials', { productData: prd_data })
     }
+
     const cartIconpressed = () => {
-       navigation.navigate('Handle_Cart')
+        navigation.navigate('Handle_Cart')
     }
+
+    const handleLogout = () => {
+        console.log('User signout')
+        dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: null } })
+    }
+
     return (
         <View style={{ backgroundColor: isDarkMode ? '#000000' : 'white' }}>
             <ScrollView showsVerticalScrollIndicator={true} stickyHeaderIndices={[0]}>
                 <View>
-                    <Home_Header navigation={navigation} cartIconPress={ cartIconpressed } />
+                    <Home_Header navigation={navigation} cartIconPress={cartIconpressed} onLogoutPress={handleLogout} />
                 </View>
                 {/* Slider*/}
                 <View style={{ marginTop: '5%' }}>
-                    <Home_Swiper navigation={navigation}/>
+                    <Home_Swiper navigation={navigation} />
                 </View>
 
                 {/* Catagory  */}

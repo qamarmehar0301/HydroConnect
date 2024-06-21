@@ -1,16 +1,64 @@
-import React from 'react';
-import { View, Text, Alert, Switch, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useContext, useState, useEffect } from 'react';
+import { View, Text, Switch, StyleSheet, TouchableOpacity } from 'react-native';
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { Avatar, Icon } from 'react-native-elements';
 import { colors } from '../global/styles';
 import { useTheme } from './DarkTheme';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import { SignInContext } from '../navigaiton/Contexts/AuthContext';
 
-export default function DrawerContent(props, { navigation }) {
+export default function DrawerContent(props) {
     const { isDarkMode, toggleTheme } = useTheme();
     const styles = isDarkMode ? darkStyles : lightStyles;
+    const [data, setData] = useState(null)
+
+    //Access the Data of the User
+    const thisUser = auth().currentUser;
+    const userID = thisUser?.uid;
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                if (userID) {
+                    const snapshot = await firestore().collection('users')
+                        .where('user_id', '==', userID)
+                        .get();
+                    if (snapshot.empty) {
+                        console.log('No matching documents.');
+                        return;
+                    }
+                    const userData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))[0]; // Assuming only one user document
+                    setData(userData);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, [userID]);
+
+    const { dispatchSignedIn } = useContext(SignInContext)
+    async function handleLogout() {
+        try {
+            auth().
+                signOut().
+                then(
+                    () => {
+                        console.log('User has been Signed out successfully..!!')
+                        dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: null } });
+                    }
+                )
+
+        } catch (error) {
+            alert(error)
+        }
+    }
+
+
     return (
         <View style={styles.container}>
-            <DrawerContentScrollView {...props} style ={{flex: 1}}>
+            <DrawerContentScrollView {...props} style={{ flex: 1 }}>
                 <View style={styles.dataContainer}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
                         <Avatar
@@ -19,10 +67,12 @@ export default function DrawerContent(props, { navigation }) {
                             size={95}
                             source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_IQRp11uZmQjD67o_OcOzjxjAzmGRHNoT7w&s" }}
                         />
-                        <View style={{ marginLeft: 10 }}>
-                            <Text style={{ fontWeight: 'bold', color: isDarkMode ? 'grey' : 'white', fontSize: 18 }}>Muhammad Qamar</Text>
-                            <Text style={{ color: isDarkMode ? 'grey' : 'white', fontSize: 12 }}> mqamar@hydroconnect.com </Text>
+
+                        <View style={{ marginLeft: 10, alignItems: 'center' }}>
+                            <Text style={{ fontWeight: 'bold', color: isDarkMode ? 'grey' : 'white', fontSize: 18 }}>{data?.name || 'No Specific Name'} </Text>
+                            <Text style={{ color: isDarkMode ? 'grey' : 'white', fontSize: 12 }}> {data?.email || 'No Specific Email'} </Text>
                         </View>
+
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: "space-evenly", paddingBottom: 5 }}>
                         <View style={{ flexDirection: 'row', marginTop: 0 }}>
@@ -43,11 +93,11 @@ export default function DrawerContent(props, { navigation }) {
                 <DrawerItem
                     labelStyle={{ color: colors.grey3 }}
                     label="Payment"
-                    icon={({ focussed, color, size }) => (
+                    icon={({ focused, color, size }) => (
                         <Icon
                             type="material-community"
                             name="credit-card-outline"
-                            color={focussed ? '#7cc' : 'grey'}
+                            color={focused ? '#7cc' : 'grey'}
                             size={size}
                         />
                     )}
@@ -55,11 +105,11 @@ export default function DrawerContent(props, { navigation }) {
                 <DrawerItem
                     label="Promotions"
                     labelStyle={{ color: colors.grey3 }}
-                    icon={({ color, size, focussed }) => (
+                    icon={({ color, size, focused }) => (
                         <Icon
                             type="material-community"
                             name="tag-heart"
-                            color={focussed ? '#7cc' : 'grey'}
+                            color={focused ? '#7cc' : 'grey'}
                             size={size}
                         />
                     )}
@@ -67,11 +117,11 @@ export default function DrawerContent(props, { navigation }) {
                 <DrawerItem
                     label="Settings"
                     labelStyle={{ color: colors.grey3 }}
-                    icon={({ color, size, focussed }) => (
+                    icon={({ color, size, focused }) => (
                         <Icon
                             type="material-community"
                             name="cog-outline"
-                            color={focussed ? '#7cc' : 'grey'}
+                            color={focused ? '#7cc' : 'grey'}
                             size={size}
                         />
                     )}
@@ -79,11 +129,11 @@ export default function DrawerContent(props, { navigation }) {
                 <DrawerItem
                     label="Help"
                     labelStyle={{ color: colors.grey3 }}
-                    icon={({ focussed, color, size }) => (
+                    icon={({ focused, color, size }) => (
                         <Icon
                             type="material-community"
                             name="lifebuoy"
-                            color={focussed ? '#7cc' : 'grey'}
+                            color={focused ? '#7cc' : 'grey'}
                             size={size}
                         />
                     )}
@@ -92,7 +142,6 @@ export default function DrawerContent(props, { navigation }) {
                     <Text style={styles.preferences}>Preferences</Text>
                     <View style={styles.switchText}>
                         <Text style={styles.darkthemeText}>Dark Theme</Text>
-
                         <Switch
                             trackColor={{ false: "#767577", true: "#81b0ff" }}
                             thumbColor={styles.whiteText}
@@ -101,24 +150,22 @@ export default function DrawerContent(props, { navigation }) {
                         />
                     </View>
                 </View>
-              
-                <TouchableOpacity style={{ marginTop: '15%' , marginBottom: 0 }} >
+                <TouchableOpacity style={{ marginTop: '15%', marginBottom: 0 }} >
                     <DrawerItem
-                        onPress={() => { Alert.alert('SignIn') }}
+                        onPress={handleLogout}
                         label='Log Out'
                         labelStyle={{ color: colors.grey3 }}
-                        icon={({ color, size, focussed }) => (
+                        icon={({ color, size, focused }) => (
                             <Icon
                                 type="material-community"
                                 name="logout-variant"
                                 size={size}
-                                color={focussed ? '#7cc' : 'grey'}
+                                color={focused ? '#7cc' : 'grey'}
                             />
                         )}
                     />
                 </TouchableOpacity>
-                </DrawerContentScrollView>
-            
+            </DrawerContentScrollView>
         </View>
     );
 }
@@ -134,6 +181,7 @@ const lightStyles = StyleSheet.create({
         backgroundColor: colors.theme,
         paddingTop: '5%',
         marginTop: -5,
+        width: 300
     },
     text: {
         color: '#000000',

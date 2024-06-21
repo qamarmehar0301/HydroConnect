@@ -7,14 +7,14 @@ import { Formik } from "formik";
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-//import { SignInContext } from "../../navigaiton/AuthContext";
+import { SignInContext } from "../../navigaiton/Contexts/AuthContext";
 
 
 GoogleSignin.configure({
     // Configure your Google sign-in options here
     // Replace these values with your actual webClientId and other options
     webClientId: '165036286443-dqeuik771p7rii6ecjunr2kis9f2ogj3.apps.googleusercontent.com',
-  });
+});
 
 export default function Login({ navigation }) {
 
@@ -23,7 +23,7 @@ export default function Login({ navigation }) {
     const textInput1 = useRef(1);
     const textInput2 = useRef(2);
     const [forgotPasswordModalVisible, setForgotPasswordModalVisible] = useState(false);
-   // const {dispatchSignedIn, signedIn} = useContext(SignInContext)
+    const { dispatchSignedIn } = useContext(SignInContext)
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -34,12 +34,12 @@ export default function Login({ navigation }) {
             const { forgot_email } = values;
 
             const emailExists = await checkEmailExists(forgot_email);
-    
+
             if (emailExists) {
-                
+
                 await auth().sendPasswordResetEmail(forgot_email);
                 Alert.alert('Password reset email sent. Check your email inbox.');
-                setForgotPasswordModalVisible(false); 
+                setForgotPasswordModalVisible(false);
             } else {
                 Alert.alert('Email not found in our records.');
             }
@@ -47,7 +47,7 @@ export default function Login({ navigation }) {
             Alert.alert('Error sending password reset email:', error.message);
         }
     };
-    
+
     const checkEmailExists = async (email) => {
         try {
             const userDoc = await firestore().collection('users').where('email', '==', email).get();
@@ -73,10 +73,14 @@ export default function Login({ navigation }) {
             if (userDoc.exists) {
                 const userData = userDoc.data();
                 if (userData.role == 'seller') {
-                    navigation.navigate('Seller_Home')
+                    // navigation.navigate('Seller_Home')
+                    console.log('Seller signed in')
+                    dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: "seller-sign-in" } })
                 }
                 else if (userData.role == 'buyer') {
-                    navigation.navigate('Drawer_Navigator')
+                    // navigation.navigate('Drawer_Navigator')
+                    console.log('Buyer signed in')
+                    dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: "signed-in" } })
                 }
                 else {
                     console.log('User Does not Exists.')
@@ -126,16 +130,16 @@ export default function Login({ navigation }) {
 
     const signInWithGoogle = async () => {
         try {
-          const { idToken } = await GoogleSignin.signIn();
-          const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-          await auth().signInWithCredential(googleCredential);
-          //navigation.navigate('Home'); // Navigate to the appropriate screen
-          Alert.alert('Sign in done')
+            const { idToken } = await GoogleSignin.signIn();
+            const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+            await auth().signInWithCredential(googleCredential);
+            //navigation.navigate('Home'); // Navigate to the appropriate screen
+            Alert.alert('Sign in done')
         } catch (error) {
-          console.error('Google sign-in error:', error);
-          Alert.alert('Error signing in with Google:', error.message);
+            console.error('Google sign-in error:', error);
+            Alert.alert('Error signing in with Google:', error.message);
         }
-      };
+    };
 
     return (
         <View>
@@ -330,7 +334,7 @@ export default function Login({ navigation }) {
                         button
                         type='google'
                         style={styles.socialButton}
-                        onPress={signInWithGoogle   }
+                        onPress={signInWithGoogle}
                     />
                 </View>
 

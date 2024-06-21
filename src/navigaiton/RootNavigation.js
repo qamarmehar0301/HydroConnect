@@ -1,13 +1,31 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import AuthStack from "./authnavigation";
-import { ThemeProvider } from "../component/DarkTheme";
+import { SignInContext } from "./Contexts/AuthContext";
+import AppStack from "./appnavigator";
+import SellerStack from "./sellernavigator";
+import DemoStack from "./demonavigator";
+
 
 export default function RootNavigator() {
+
+    const { signedIn } = useContext(SignInContext)
+
     return (
-            <NavigationContainer>
+
+        <NavigationContainer>
+            {signedIn.userToken ? (
+                signedIn.userToken === "seller-sign-in" ? (
+                    <SellerStack />
+                ) : signedIn.userToken === "logout" ? (
+                    <DemoStack/>
+                ) : (
+                    <AppStack />
+                )
+            ) : (
                 <AuthStack />
-            </NavigationContainer>
-        
+            )}
+        </NavigationContainer>
+
     )
 }
