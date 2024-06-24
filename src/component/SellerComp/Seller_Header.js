@@ -31,7 +31,7 @@ export default function Seller_Header({ navigation, cartIconPress, onLogoutPress
             <View style={{ justifyContent: 'center', alignItems: 'center', marginRight: '3.5%'}}>
                  <Icon
                     type="material-community"
-                    name="close-circle"
+                    name="logout"
                     color='white'
                     size={32}
                     onPress={onLogoutPress}

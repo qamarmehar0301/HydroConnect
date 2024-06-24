@@ -46,7 +46,7 @@ export default function DrawerContent(props) {
                 then(
                     () => {
                         console.log('User has been Signed out successfully..!!')
-                        dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: null } });
+                        //dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: null } });
                     }
                 )
 

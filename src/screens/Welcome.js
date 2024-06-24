@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Text, View, StyleSheet, Image, Alert } from 'react-native';
 import { Button } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import { colors } from '../global/styles';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import { SignInContext } from '../navigaiton/Contexts/AuthContext';
 
 export default function Welcome_Screen({ navigation }) {
+
+    const { dispatchSignedIn } = useContext(SignInContext)
 
     // useEffect(() => {
     //     const unsubscribe = auth().onAuthStateChanged(user => {
@@ -29,9 +32,9 @@ export default function Welcome_Screen({ navigation }) {
     //             const userData = userDoc.data();
     //             if (userData.role === 'seller') {
     //                 console.log('Seller login hi')
-    //                 // navigation.replace('Seller_Home');
+    //                 dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: "seller-sign-in" } })
     //             } else if (userData.role === 'buyer') {
-    //                 // navigation.replace('Drawer_Navigator');
+    //                 dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: "signed-in" } })
     //                 console.log('Buyer login hi')
     //             }
     //         } else {

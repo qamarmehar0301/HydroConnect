@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import AuthStack from "./authnavigation";
-import { SignInContext } from "./Contexts/AuthContext";
 import AppStack from "./appnavigator";
-import SellerStack from "./sellernavigator";
+import SellerStack from "./Seller Navigations/sellernavigator";
 import DemoStack from "./demonavigator";
+import { SignInContext } from "./Contexts/AuthContext";
 
 
 export default function RootNavigator() {

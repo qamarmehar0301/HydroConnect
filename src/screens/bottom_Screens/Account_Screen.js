@@ -42,21 +42,26 @@ export default function Account_Screen({ navigation }) {
     }, [userID]);
 
     const handleLogout = () => {
-        try {
-            auth().
-                signOut().
-                then(
-                    () => {
-                        console.log('User has been Signed out successfully..!!')
-                        // dispatchSignedIn({ type: 'LOGOUT' });
-                        dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: "seller-sign-in" } })
-                    }
-                )
-
-        } catch (error) {
-            alert(error)
-        }
-    }
+        Alert.alert(
+          "Logout Confirmation",
+          "Are you sure you want to logout?",
+          [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Logout cancelled"),
+              style: "cancel"
+            },
+            {
+              text: "OK",
+              onPress: () => {
+                console.log('User signout');
+               // dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: null } });
+              }
+            }
+          ],
+          { cancelable: false }
+        );
+      };
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: isDarkMode ? '#000000' : 'white' }}>

@@ -1,7 +1,6 @@
 import react from 'react';
 import { View, Image, StyleSheet, Alert } from 'react-native'
 import Swiper from 'react-native-swiper';
-import Offer_Card from './Offer_Card';
 import Home_Slider from './Home_Slider';
 
 export default function Home_Swiper({navigation}) {

@@ -198,11 +198,11 @@ export default function Checkout_Screen({ route, navigation }) {
         let confirmPayIntent = await confirmPayment(res?.data?.paymentIntent, { paymentMethodType: 'Card' });
         console.log('Confirm Payment Successful!!!!', confirmPayIntent);
         // Navigate to order history page with necessary order details
-        navigation.navigate('OrderHistory', {
-          totalAmount,
-          last4Digits: cardInfo.last4,
-          // Add any other relevant order details here
-        });
+        // navigation.navigate('OrderHistory', {
+        //   totalAmount,
+        //   last4Digits: cardInfo.last4,
+        //   // Add any other relevant order details here
+        // });
       } else {
         throw new Error('Payment intent not found in response');
       }

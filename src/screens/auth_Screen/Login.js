@@ -74,12 +74,10 @@ export default function Login({ navigation }) {
                 const userData = userDoc.data();
                 if (userData.role == 'seller') {
                     // navigation.navigate('Seller_Home')
-                    console.log('Seller signed in')
                     dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: "seller-sign-in" } })
                 }
                 else if (userData.role == 'buyer') {
                     // navigation.navigate('Drawer_Navigator')
-                    console.log('Buyer signed in')
                     dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: "signed-in" } })
                 }
                 else {
@@ -98,35 +96,6 @@ export default function Login({ navigation }) {
             }
         }
     }
-
-    // async function SignIn(data, resetForm) {
-    //     try {
-    //         const { email, password } = data;
-
-    //         const userCredentials = await auth().signInWithEmailAndPassword(email, password)
-    //         const user = userCredentials.user;
-
-    //         //Fetching the data from the firestore collection
-    //         const userDoc = await firestore().collection('users').doc(user.uid).get();
-    //         //Reset the Form
-    //         resetForm();
-
-    //         if (userDoc.exists) {
-    //             console.log('Login k time py:', signedIn)
-    //             dispatchSignedIn({type: "UPDATE_SIGN_IN", payload: {userToken: "signedIn"}})
-    //         }
-
-    //     } catch (error) {
-    //         if (error.code === 'auth/user-not-found') {
-    //             Alert.alert('No user found with this email!');
-    //         } else if (error.code === 'auth/wrong-password') {
-    //             Alert.alert('Incorrect password!');
-    //         } else {
-    //             console.error(error);
-    //             Alert.alert('An error occurred. Please try again.');
-    //         }
-    //     }
-    // }
 
     const signInWithGoogle = async () => {
         try {

@@ -7,9 +7,7 @@ import Search_Screen from "../screens/bottom_Screens/Search_Screen";
 import Order_Screen from "../screens/bottom_Screens/Order_Screen";
 import Account_Screen from "../screens/bottom_Screens/Account_Screen";
 import Grocery_Products from "../screens/bottom_Screens/Grocery_products";
-import CategoryProducts from '../screens/CatagoryProduct';
 import Handle_Cart from "../screens/handleCart";
-import Product_Details from "../screens/ProductDetails";
 
 const Bottom = createBottomTabNavigator();
 
@@ -18,7 +16,6 @@ export default function Bottom_Tab_Navigator() {
         
             <Bottom.Navigator tabBarOptions={{ activeTintColor: colors.theme }} >
                 <Bottom.Screen
-                    
                     name="Home_Screen"
                     component={Home_Screen}
                     options={{

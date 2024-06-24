@@ -36,7 +36,7 @@ export default function Home_Screen({ navigation }) {
 
     const handleLogout = () => {
         console.log('User signout')
-        dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: null } })
+        //dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: null } })
     }
 
     return (

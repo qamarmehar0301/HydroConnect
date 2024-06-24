@@ -4,7 +4,6 @@ import { Text, View, StyleSheet, TouchableOpacity, FlatList, Alert, ScrollView, 
 import { useTheme } from "../component/DarkTheme";
 import Header from "../component/Header";
 import { colors } from "../global/styles";
-import Cart_Card from "../component/cart/Cart_card";
 import { removeFromCart, incrementInCart, decrementInCart } from "../component/cart/cart_Action";
 import { Button, Icon } from "react-native-elements";
 
