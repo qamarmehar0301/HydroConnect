@@ -1,10 +1,10 @@
 import React from "react";
-import { Text, View, StyleSheet, ScrollView, Image, TouchableOpacity, Alert } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 import Header from "../../component/Header";
 import { colors } from "../../global/styles";
 
 export default function S_Product_Details({ route, navigation }) {
-    const { productData } = route.params;
+    const { product } = route.params;
 
     return (
         <View style={[styles.container, { backgroundColor: 'white' }]}>
@@ -14,29 +14,29 @@ export default function S_Product_Details({ route, navigation }) {
                 </View>
                 <TouchableOpacity style={styles.imageContainer}>
                     <Image
-                        source={{ uri: productData.image }}
+                        source={{ uri: product.imageUrl }}
                         //source={{ uri: "https://shorturl.at/Aprqt" }}
                         style={styles.image} />
                 </TouchableOpacity>
                 <View style={styles.infoContainer}>
-                    <Text style={[styles.title, { color:'black' }]}>{productData.name}</Text>
-                    <Text style={[styles.price, { color:'black' }]}>Rs: {productData.price.toString()}</Text> 
+                    <Text style={[styles.title, { color:'black' }]}>{product.title}</Text>
+                    <Text style={[styles.price, { color:'black' }]}>Rs: {product.price.toString()}</Text> 
                    
                 </View>
                 <View style={styles.categoryContainer}>
-                    <Text style={[styles.text, { color:'black' }]}>{productData.tagline} </Text>
+                    <Text style={[styles.text, { color:'black' }]}>{product.tagLine} </Text>
                 </View>
                 <View style={styles.categoryContainer}>
                     <Text style={[styles.categoryTitle, { color:'black' }]}>Category: </Text>
-                    <Text style={[styles.category, { color:colors.theme }]}>{productData.category.toUpperCase()}</Text>
+                    <Text style={[styles.category, { color:colors.theme }]}>{product.category.toUpperCase()}</Text>
                 </View> 
                 <View style={styles.quantityContainer}>
                     <Text style={[styles.quantityTitle, { color: 'black' }]}>Available Stock: </Text>
-                    <Text style={[styles.quantity, { color: colors.theme }]}>{productData.stock} </Text>
+                    <Text style={[styles.quantity, { color: colors.theme }]}>{product.quantity} </Text>
                 </View>
                 <View style={styles.descriptionContainer}>
                     <Text style={[styles.descriptionTitle, { color: 'black' }]}>Description: </Text>
-                    <Text style={[styles.descriptionText, { color: 'black' }]}>{productData.description}</Text>
+                    <Text style={[styles.descriptionText, { color: 'black' }]}>{product.description}</Text>
                 </View>
             </ScrollView>
         </View>
@@ -55,7 +55,8 @@ const styles = StyleSheet.create({
     },
     image: {
         height: '100%',
-        width: '95%',
+        width: '100%',
+        borderRadius: 15
     },
     infoContainer: {
         flexDirection: 'row',

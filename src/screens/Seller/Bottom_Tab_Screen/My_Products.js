@@ -39,12 +39,16 @@ export default function My_Product_Screen({ navigation, route }) {
     navigation.navigate('Add_Product');
   };
 
+  const handleViewProduct = (product) => {
+    navigation.navigate('S_Product_Details', { product });
+  };
+
   const handleEditProduct = (product) => {
     navigation.navigate('Edit_Product_Screen', { product });
   };
 
   const handleDeleteProduct = (productId) => {
-    Alert.alert('Delete', 'Do you Want to Delete the Item:', [
+    Alert.alert('Delete', 'Do you Want to Delete the', [
       { text: 'Cancel', style: 'cancel' },
       { text: 'OK', onPress: async () => {
           try {
@@ -92,7 +96,7 @@ export default function My_Product_Screen({ navigation, route }) {
                   type="material-community"
                   size={30}
                   color='grey'
-                  onPress={() => { navigation.navigate('S_Product_Details', { product }) }}
+                  onPress={() => handleViewProduct(product)}
                 />
                 <Icon
                   name="pencil"
