@@ -1,86 +1,123 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, Alert, TouchableOpacity, ScrollView, Image } from 'react-native';
-import { useTheme } from "../../../component/DarkTheme";
+
 import Header from "../../../component/Header";
 import { colors } from "../../../global/styles";
 import { Icon } from "react-native-elements";
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 export default function My_Product_Screen({ navigation, route }) {
-  const data = route.params;
-  const productData = {
-    image: 'https://i.pinimg.com/736x/e9/57/eb/e957ebe67e74cf98b59a558fa1f73263.jpg',
-    name: 'Mangoes',
-    price: '500rs',
-    tagline: 'This is the Product Tagline',
-    category: 'Fruits',
-    stock: '50',
-    description: 'This sis tte product description.'
-  }
-  const { isDarkMode } = useTheme();
 
-  const handle_Prd_Btn = () => {
-    navigation.navigate('Add_Product')
-  }
+  const [products, setProducts] = useState([]);
+
+  const sellerID = auth().currentUser.uid;
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const snapshot = await firestore()
+          .collection("All_Products")
+          .where("sellerId", "==", sellerID)
+          .get();
+
+        const productsList = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setProducts(productsList);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+    return () => {}; 
+  }, [products]);
+  
+  const handleAddProduct = () => {
+    navigation.navigate('Add_Product');
+  };
+
+  const handleEditProduct = (product) => {
+    navigation.navigate('Edit_Product_Screen', { product });
+  };
+
+  const handleDeleteProduct = (productId) => {
+    Alert.alert('Delete', 'Do you Want to Delete the Item:', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'OK', onPress: async () => {
+          try {
+            await firestore().collection("All_Products").doc(productId).delete();
+            setProducts(products.filter(product => product.id !== productId));
+            
+          } catch (error) {
+            console.error("Error deleting product:", error);
+          }
+        }
+      }
+    ]);
+  };
+
   return (
-    <View style={[styles.container, { backgroundColor: isDarkMode ? '#000000' : 'white' }]}>
+    <View style={[styles.container, { backgroundColor:'white' }]}>
       <Header title="My Products" navigation={navigation} />
 
-      <ScrollView style={{ flex: 1 }} >
-
-        <View style={styles.cardContainer}>
-
-          <View style={{ width: '35%', height: '100%', alignItems: "center", justifyContent: 'center' }}>
-            <Image style={styles.image} source={{ uri: 'https://i.pinimg.com/736x/e9/57/eb/e957ebe67e74cf98b59a558fa1f73263.jpg' }} />
-          </View>
-
-          <View style={{ width: '65%', height: '100%', flexDirection: 'row' }}>
-            <View style={{ flexDirection: 'column', justifyContent: 'center', width: '80%', height: '100%' }}>
-              <Text style={{ color: '#000', fontSize: 20 }}>Mangoes</Text>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{ color: 'grey', fontSize: 16 }}>Price: </Text>
-                <Text style={{ color: '#32cd32' }}>500rs </Text>
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{ color: 'grey', fontSize: 16 }}>Quantity: </Text>
-                <Text style={{ color: '#32cd32' }}>500 </Text>
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{ color: 'grey', fontSize: 16 }}>Category: </Text>
-                <Text style={{ color: '#32cd32' }}>Fruits </Text>
-              </View>
-              <Text style={{ color: 'black', fontSize: 14 }}>This is the Products tagline. </Text>
+      <ScrollView style={{ flex: 1 }}>
+        {products.map((product) => (
+          <View key={product.id} style={styles.cardContainer}>
+            <View style={{ width: '35%', height: '100%', alignItems: "center", justifyContent: 'center' }}>
+              <Image style={styles.image} source={{ uri: product.imageUrl }} />
             </View>
-            <View style={{ width: '20%', height: '100%', flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'center' }}>
-              <Icon
-                name="eye"
-                type="material-community"
-                size={30}
-                color='grey'
-                onPress={() => { navigation.navigate('S_Product_Details',{productData})}}
-              />
-              <Icon
-                name="pencil"
-                type="material-community"
-                size={25}
-                color='grey'
-                onPress={() => { navigation.navigate('Edit_Product_Screen',{productData})}}
-                style={styles.button}
-              />
-              <Icon
-                name="delete"
-                type="material-community"
-                size={25}
-                color='grey'
-                onPress={() => { Alert.alert('Delete') }}
-                style={styles.button}
-              />
+            <View style={{ width: '65%', height: '100%', flexDirection: 'row' }}>
+              <View style={{ flexDirection: 'column', justifyContent: 'center', width: '80%', height: '100%' }}>
+                <Text style={{ color: '#000', fontSize: 20 }}>{product.title}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={{ color: 'grey', fontSize: 16 }}>Price: </Text>
+                  <Text style={{ color: '#32cd32' }}>{product.price} </Text>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={{ color: 'grey', fontSize: 16 }}>Quantity: </Text>
+                  <Text style={{ color: '#32cd32' }}>{product.quantity} </Text>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={{ color: 'grey', fontSize: 16 }}>Category: </Text>
+                  <Text style={{ color: '#32cd32' }}>{product.category} </Text>
+                </View>
+                <Text style={{ color: 'black', fontSize: 14 }}>{product.tagLine}</Text>
+              </View>
+              <View style={{ width: '20%', height: '100%', flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'center' }}>
+                <Icon
+                  name="eye"
+                  type="material-community"
+                  size={30}
+                  color='grey'
+                  onPress={() => { navigation.navigate('S_Product_Details', { product }) }}
+                />
+                <Icon
+                  name="pencil"
+                  type="material-community"
+                  size={25}
+                  color='grey'
+                  onPress={() => handleEditProduct(product)}
+                  style={styles.button}
+                />
+                <Icon
+                  name="delete"
+                  type="material-community"
+                  size={25}
+                  color='grey'
+                  onPress={() => handleDeleteProduct(product.id)}
+                  style={styles.button}
+                />
+              </View>
             </View>
           </View>
-        </View>
+        ))}
       </ScrollView>
 
-      <TouchableOpacity style={[styles.cartBtn, { backgroundColor: colors.theme }]} onPress={handle_Prd_Btn}>
-        <Text style={[styles.cartText, {}]}> Add new Product..! </Text>
+      <TouchableOpacity style={[styles.cartBtn, { backgroundColor: colors.theme }]} onPress={handleAddProduct}>
+        <Text style={styles.cartText}> Add new Product..! </Text>
       </TouchableOpacity>
 
     </View>
@@ -119,8 +156,7 @@ const styles = StyleSheet.create({
     width: '95%',
     height: 150,
     marginHorizontal: '3%'
-  }
-  ,
+  },
   image: {
     width: '90%',
     height: '80%',
@@ -139,4 +175,3 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   }
 });
-

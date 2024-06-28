@@ -10,17 +10,17 @@ import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 
 
-export default function Edit_Product_Screen({ route,navigation }) {
+export default function Edit_Product_Screen({ route, navigation }) {
 
-    const { productData } = route.params;
+  const { product } = route.params;
 
-  const [selectedCategory, setSelectedCategory] = useState('fruits');
-  const [title, setTitle] = useState('');
-  const [price, setPrice] = useState()
-  const [tagLine, settagLine] = useState()
-  const [quantity, setQuantity] = useState()
-  const [description, setDiscription] = useState()
-  const [image, setImage] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(product.category);
+  const [title, setTitle] = useState(product.title);
+  const [price, setPrice] = useState(product.price);
+  const [tagLine, setTagLine] = useState(product.tagLine);
+  const [quantity, setQuantity] = useState(product.quantity);
+  const [description, setDescription] = useState(product.description);
+  const [image, setImage] = useState(product.imageUrl);
 
   const currentUser = auth().currentUser;
   const sellerId = currentUser.uid;
@@ -71,61 +71,42 @@ export default function Edit_Product_Screen({ route,navigation }) {
     );
   };
 
-  const AddItemHandler = async () => {
-
+  const EditItemHandler = async () => {
     try {
 
-      if (!title || !price || !tagLine || !quantity || !description || !image) {
-        Alert.alert('Incomplete Fields', 'Please fill in all fields.');
-        return;
+      let imageUrl = image;
+  
+      // If the image was updated, upload the new image to Firebase Storage
+      if (image !== product.imageUrl) {
+        const filename = image.substring(image.lastIndexOf('/') + 1);
+        const reference = storage().ref(`images/${filename}`);
+        const task = reference.putFile(image);
+        await task;
+        imageUrl = await reference.getDownloadURL();
       }
-
-      // Upload image to Firebase Storage
-      const reference = storage().ref(`images/${filename}`);
-    const task = reference.putFile(image);
-    task.on('state_changed', (taskSnapshot) => {
-      console.log(`${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`);
-    });
-    task.then(async () => {
-      console.log('Image uploaded to the bucket!');
-      // Get download URL
-      const downloadURL = await reference.getDownloadURL();})
-
-      // const productData = {
-      //   title: title,
-      //   price: price,
-      //   tagLine: tagLine,
-      //   quantity: quantity,
-      //   category: selectedCategory,
-      //   description: description,
-      //   image: imageUrl,
-      //   sellerId: sellerId,
-      // };
-
-      // console.log(productData)
-
-      // const collection = await firestore().collection('products').add(productData);
-
-      Alert.alert(
-        'Add Item',
-        'Product has been added Successfully...!!!',
-       // navigation.navigate('My_Product_Screen'))
-      )
-      setTitle('');
-      setPrice('');
-      settagLine('');
-      setQuantity('');
-      setSelectedCategory('');
-      setDiscription('');
-      setImage(null);
-
+  
+      // Update product data in Firestore
+      await firestore().collection('All_Products').doc(product.id).update({
+        title,
+        price,
+        tagLine,
+        quantity,
+        category: selectedCategory,
+        description,
+        imageUrl,
+        sellerId
+      });
+  
+      Alert.alert('Edit Item', 'Product has been updated Successfully...!!!');
+      navigation.navigate('My_Product_Screen');
     } catch (error) {
-      alert('Error Occured..!!', error)
+      console.error('Error updating product:', error);
+      Alert.alert('Error Occurred', 'There was an error updating the product.');
     }
   };
 
   return (
-    <View style={[styles.container, { backgroundColor:  'white' }]}>
+    <View style={[styles.container, { backgroundColor: 'white' }]}>
       <Header title="Edit Product" navigation={navigation} />
 
       <ScrollView nestedScrollEnabled={true} style={{ flex: 1 }}>
@@ -135,27 +116,27 @@ export default function Edit_Product_Screen({ route,navigation }) {
             placeholder='Product Name'
             placeholderTextColor="#696969"
             style={styles.input}
-            value={productData.name} onChangeText={(text) => setTitle(text)}
+            value={title} onChangeText={(text) => setTitle(text)}
           />
           <TextInput
             placeholder='Product Price'
             placeholderTextColor="#696969"
             style={styles.input}
             keyboardType="numeric"
-            value={productData.price} onChangeText={(text) => setPrice(text)}
+            value={price} onChangeText={(text) => setPrice(text)}
           />
           <TextInput
             placeholder='Product Tag Line'
             placeholderTextColor="#696969"
             style={styles.input}
-            value={productData.tagline} onChangeText={(text) => settagLine(text)}
+            value={tagLine} onChangeText={(text) => setTagLine(text)}
           />
           <TextInput
             placeholder='Available Product Quantity'
             placeholderTextColor="#696969"
             style={styles.input}
             keyboardType="numeric"
-            value={productData.stock} onChangeText={(text) => setQuantity(text)}
+            value={quantity} onChangeText={(text) => setQuantity(text)}
           />
 
           <View style={styles.PickerContainer}>
@@ -169,7 +150,7 @@ export default function Edit_Product_Screen({ route,navigation }) {
                   selectedValue={selectedCategory}
                   onValueChange={(itemValue, itemIndex) => setSelectedCategory(itemValue)}
                 >
-                  <Picker.Item label= {productData.category} value={productData.category} />
+                  <Picker.Item label={product.category} value={product.category} />
                   <Picker.Item label="Vegetables" value="vegetables" />
                   <Picker.Item label="Dairy" value="dairy" />
                   <Picker.Item label="Frozenfood" value="frozenfood" />
@@ -187,12 +168,12 @@ export default function Edit_Product_Screen({ route,navigation }) {
             style={styles.input1}
             multiline={true}
             numberOfLines={4}
-            value={productData.description} onChangeText={(text) => setDiscription(text)}
+            value={description} onChangeText={(text) => setDescription(text)}
           />
 
           <TouchableOpacity onPress={imagePick} style={styles.imageContainer}>
-            {productData.image ? (
-              <Image style={styles.image} source={{ uri: productData.image }} />
+            {image ? (
+              <Image style={styles.image} source={{ uri: image }} />
             ) : (
               <Text style={{ color: '#696969' }}>Product Image</Text>
             )}
@@ -205,7 +186,7 @@ export default function Edit_Product_Screen({ route,navigation }) {
           title='Edit Product'
           titleStyle={buttonStyle.buttonTitle}
           buttonStyle={buttonStyle.styledButton}
-          onPress={AddItemHandler}
+          onPress={EditItemHandler}
         />
       </View>
 

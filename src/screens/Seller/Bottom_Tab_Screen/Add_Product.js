@@ -6,10 +6,10 @@ import { Picker } from "@react-native-picker/picker";
 import { Button } from "react-native-elements";
 import { buttonStyle } from "../../../global/styles";
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import firestore from '@react-native-firebase/firestore'; // Assuming you're using React Native Firebase
+import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import { getStorage, ref, uploadBytes } from "firebase/storage";
-
+//import { getStorage, ref, uploadBytes } from "firebase/storage";
+import storage from '@react-native-firebase/storage';
 
 export default function Add_Product_Screen({ navigation }) {
 
@@ -24,8 +24,9 @@ export default function Add_Product_Screen({ navigation }) {
 
   const currentUser = auth().currentUser;
   const sellerId = currentUser.uid;
-  const storage = getStorage();
+  //const storage = getStorage();
 
+  //Pick Image from the phone
   const imagePick = () => {
     const options = {
       mediaType: 'photo',
@@ -72,68 +73,74 @@ export default function Add_Product_Screen({ navigation }) {
     );
   };
 
+  //Upload Image 
+  const uploadImage = async (image) => {
+    const imageName = image.substring(image.lastIndexOf('/') + 1);
+    const imageRef = storage().ref(`Product_Images/${imageName}`);
+    try {
+      const response = await fetch(image);
+      const blob = await response.blob();
+      await imageRef.put(blob);
+      // Get download URL
+      const downloadURL = await imageRef.getDownloadURL();
+      return downloadURL;
+    } catch (error) {
+      console.error('Error uploading image: ', error.message);
+      throw new Error('Image upload failed');
+    }
+  };
+
   const AddItemHandler = async () => {
+    if (!title || !price || !tagLine || !quantity || !description || !image) {
+      alert('Please fill all fields first...!!!');
+      return;
+    }
 
     try {
+      const downloadURL = await uploadImage(image);
+      const Prd_Data = {
+        title,
+        price,
+        tagLine,
+        quantity,
+        description,
+        category: selectedCategory,
+        imageUrl: downloadURL,
+      };
+      const Updated_Prd_Data = {
+        title,
+        price,
+        tagLine,
+        quantity,
+        description,
+        category: selectedCategory,
+        imageUrl: downloadURL,
+        sellerId
+      };
 
-//       const img_Ref = ref(storage, image);
+      // // Add product to the seller's collection
+      // await firestore()
+      //   .collection("Products")
+      //   .doc(sellerId)
+      //   .collection("My_Products")
+      //   .add(Prd_Data);
 
-//       /** @type {any} */
-// const metadata = {
-//   contentType: 'image/jpeg',
-// };
+      // Add product to the common collection
+      await firestore()
+        .collection("All_Products")
+        .add(Updated_Prd_Data);
 
-// const uploadTask = uploadBytes(img_Ref, file, metadata);
-// console.log('upload task', uploadTask)
-      // if (!title || !price || !tagLine || !quantity || !description || !image) {
-      //   Alert.alert('Incomplete Fields', 'Please fill in all fields.');
-      //   return;
-      // }
-
-      // // Upload image to Firebase Storage
-      // const reference = storage().ref(`Product_Images/${image}`);
-      // const task = reference.putFile(image);
-      // task.on('state_changed', (taskSnapshot) => {
-      //   console.log(`${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`);
-      // });
-      // task.then(async () => {
-      //   console.log('Image uploaded to the bucket!');
-      //   // Get download URL
-      //   const downloadURL = await reference.getDownloadURL();
-      //   console.log('Download UrL:', downloadURL)
-      // })
-
-
-      // const productData = {
-      //   title: title,
-      //   price: price,
-      //   tagLine: tagLine,
-      //   quantity: quantity,
-      //   category: selectedCategory,
-      //   description: description,
-      //   image: imageUrl,
-      //   sellerId: sellerId,
-      // };
-
-      // console.log(productData)
-
-      // const collection = await firestore().collection('products').add(productData);
-
-      // Alert.alert(
-      //   'Add Item',
-      //   'Product has been added Successfully...!!!',
-      //   // navigation.navigate('My_Product_Screen'))
-      // )
+      alert('Product has been Successfully Added..!!!');
       setTitle('');
       setPrice('');
       settagLine('');
       setQuantity('');
-      setSelectedCategory('');
+      setSelectedCategory('fruits');  // Default value if necessary
       setDiscription('');
       setImage(null);
 
     } catch (error) {
-      alert('Error Occured..!!', error)
+      alert('Error Occurred..!!', error.message);
     }
   };
 
@@ -207,7 +214,7 @@ export default function Add_Product_Screen({ navigation }) {
             {image ? (
               <Image style={styles.image} source={{ uri: image }} />
             ) : (
-              <Text style={{ color: '#696969' }}>Product Image</Text>
+              <Text style={{ color: '#696969' }}>Product Image </Text>
             )}
           </TouchableOpacity>
         </View>
