@@ -43,25 +43,26 @@ export default function Account_Screen({ navigation }) {
 
     const handleLogout = () => {
         Alert.alert(
-          "Logout Confirmation",
-          "Are you sure you want to logout?",
-          [
-            {
-              text: "Cancel",
-              onPress: () => console.log("Logout cancelled"),
-              style: "cancel"
-            },
-            {
-              text: "OK",
-              onPress: () => {
-                console.log('User signout');
-               // dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: null } });
-              }
-            }
-          ],
-          { cancelable: false }
+            "Logout Confirmation",
+            "Are you sure you want to logout?",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Logout cancelled"),
+                    style: "cancel"
+                },
+                {
+                    text: "OK",
+                    onPress: () => {
+                        auth().signOut().then(
+                            alert('User has been Successfully Logout..!!!'))
+                        // dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: null } });
+                    }
+                }
+            ],
+            { cancelable: false }
         );
-      };
+    };
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: isDarkMode ? '#000000' : 'white' }}>

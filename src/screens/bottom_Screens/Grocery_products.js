@@ -1,30 +1,45 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, FlatList, Alert } from 'react-native';
 import { useTheme } from "../../component/DarkTheme";
 import Header from "../../component/Header";
 import Grocery_Card from "../../component/Grocery_Card";
 import { ScrollView } from "react-native-gesture-handler";
-import { deliveryData } from "../../global/data";
 import { useToast } from "react-native-toast-notifications";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../component/cart/cart_Action";
+import firestore from '@react-native-firebase/firestore'; 
 
 export default function Grocery_Products({ navigation }) {
   const { isDarkMode } = useTheme();
   const dispatch = useDispatch();
   const toast = useToast();
+  const [products, setProducts] = useState([]);
 
   const categories = {
-    vegetables: deliveryData.filter(item => item.category === 'vegetables'),
-    fruits: deliveryData.filter(item => item.category === 'fruits'),
-    dairy: deliveryData.filter(item => item.category === 'dairy'),
-    meat: deliveryData.filter(item => item.category === 'meat'),
-    seafood: deliveryData.filter(item => item.category === 'seafood'),
+    vegetables: products.filter(item => item.category === 'vegetables'),
+    fruits: products.filter(item => item.category === 'fruits'),
+    dairy: products.filter(item => item.category === 'dairy'),
+    meat: products.filter(item => item.category === 'meat'),
+    seafood: products.filter(item => item.category === 'seafood'),
   };
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const querySnapshot = await firestore().collection('All_Products').get();
+        const fetchedProducts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setProducts(fetchedProducts);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        Alert.alert('Error', 'Failed to fetch products from Firestore.');
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   const cardPressed = (data) => {
-    const prd_data = data;
-    navigation.navigate('ProductDetials', { productData: prd_data })
+    navigation.navigate('ProductDetials', { productData: data });
   }
 
   const cartBtnPressed = (product) => {
@@ -46,30 +61,28 @@ export default function Grocery_Products({ navigation }) {
           <Header title="Grocery" navigation={navigation} />
         </View>
 
-        {Object.entries(categories).map(([category, items]) => (
-          items.length > 0 && (
-            <View key={category}>
-              <Text style={{ ...styles.text, color: isDarkMode ? '#ffffff' : '#000000' }}>
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </Text>
-              <FlatList
-                data={items}
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
-                  <Grocery_Card
-                    Prd_Name={item.name}
-                    Prd_Image={item.image}
-                    Prd_Price={item.price}
-                    onPressGrocery_Card={() => { cardPressed(item) }}
-                    onPressCartBtn={() => { cartBtnPressed(item) }}
-                  />
-                )}
-                contentContainerStyle={styles.flatListContainer}
-              />
-            </View>
-          )
+        {Object.keys(categories).map(category => (
+          <View key={category}>
+            <Text style={{ ...styles.text, color: isDarkMode ? '#ffffff' : '#000000' }}>
+              {category.charAt(0).toUpperCase() + category.slice(1)}
+            </Text>
+            <FlatList
+              data={products.filter(item => item.category === category)}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item, index) => item.id}
+              renderItem={({ item }) => (
+                <Grocery_Card
+                  Prd_Name={item.title}
+                  Prd_Image={item.imageUrl}
+                  Prd_Price={item.price}
+                  onPressGrocery_Card={() => { cardPressed(item) }}
+                  onPressCartBtn={() => { cartBtnPressed(item) }}
+                />
+              )}
+              contentContainerStyle={styles.flatListContainer}
+            />
+          </View>
         ))}
 
       </ScrollView>

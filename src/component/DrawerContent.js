@@ -40,19 +40,26 @@ export default function DrawerContent(props) {
 
     const { dispatchSignedIn } = useContext(SignInContext)
     async function handleLogout() {
-        try {
-            auth().
-                signOut().
-                then(
-                    () => {
-                        console.log('User has been Signed out successfully..!!')
-                        //dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: null } });
+        Alert.alert(
+            "Logout Confirmation",
+            "Are you sure you want to logout?",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Logout cancelled"),
+                    style: "cancel"
+                },
+                {
+                    text: "OK",
+                    onPress: () => {
+                        auth().signOut().then(
+                            alert('User has been Successfully Logout..!!!'))
+                        // dispatchSignedIn({ type: "SIGN_IN_STATE", payload: { userToken: null } });
                     }
-                )
-
-        } catch (error) {
-            alert(error)
-        }
+                }
+            ],
+            { cancelable: false }
+        );
     }
 
 

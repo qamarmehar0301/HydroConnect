@@ -1,11 +1,11 @@
 export const filterData = [
-    { name: "Fruits", category: "fruits", image: require('../assets/fruits.jpg'), id: "0" },
-    { name: "Vegetables", category: "vegetables", image: require('../assets/vegetables.jpg'), id: "1" },
-    { name: "Dairy", category: "dairy", image: require('../assets/dairy.jpg'), id: "2" },
-    { name: "Frozen Food", category: "frozenfood", image: require('../assets/frozen.jpg'), id: "3" },
-    { name: "Meat", category: "meat", image: require('../assets/meat.jpg'), id: "4" },
-    { name: "Pet Food", category: "petfood", image: require('../assets/pet_food.jpg'), id: "5" },
-    { name: "Sea Food", category: "seafood", image: require('../assets/seafood.jpg'), id: "6" },
+    { name: "Fruits ", category: "fruits", image: require('../assets/fruits.jpg'), id: "0" },
+    { name: "Vegetables ", category: "vegetables", image: require('../assets/vegetables.jpg'), id: "1" },
+    { name: "Dairy ", category: "dairy", image: require('../assets/dairy.jpg'), id: "2" },
+    { name: "Frozen Food ", category: "frozenfood", image: require('../assets/frozen.jpg'), id: "3" },
+    { name: "Meat ", category: "meat", image: require('../assets/meat.jpg'), id: "4" },
+    { name: "Pet Food ", category: "petfood", image: require('../assets/pet_food.jpg'), id: "5" },
+    { name: "Sea Food ", category: "seafood", image: require('../assets/seafood.jpg'), id: "6" },
 ];
 
 export const groceryStoreData = [

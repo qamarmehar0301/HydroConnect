@@ -1,4 +1,4 @@
-import React, { useState , useContext} from "react";
+import React, { useState, useContext, useEffect, useMemo } from "react";
 import { ScrollView, Text, View, FlatList, Pressable, StyleSheet, Image, Alert, Dimensions } from 'react-native';
 import CountDown from 'react-native-countdown-component';
 import { colors } from "../../global/styles";
@@ -10,6 +10,7 @@ import Promotion_Card from "../../component/Promotion_card";
 import Home_Contact from "../../component/Home_Contact";
 import { useTheme } from "../../component/DarkTheme";
 import { SignInContext } from "../../navigaiton/Contexts/AuthContext";
+import firestore from '@react-native-firebase/firestore';
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 
@@ -17,7 +18,23 @@ export default function Home_Screen({ navigation }) {
 
     const [checkIndex, setcheckIndex] = useState("0")
     const { isDarkMode } = useTheme();
-    const {dispatchSignedIn} = useContext(SignInContext)
+    const { dispatchSignedIn } = useContext(SignInContext)
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const querySnapshot = await firestore().collection('All_Products').get();
+                const fetchedProducts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                setProducts(fetchedProducts);
+            } catch (error) {
+                console.error('Error fetching products:', error);
+                Alert.alert('Error', 'Failed to fetch products from Firestore.');
+            }
+        };
+
+        fetchProducts();
+    }, []);
 
     const handlePress = (category) => {
         setcheckIndex(category.id);
@@ -68,7 +85,7 @@ export default function Home_Screen({ navigation }) {
                                 <Pressable onPress={() => handlePress(item)} >
                                     <View style={checkIndex === item.id ? { ...styles.selected_catagory_card } : { ...styles.catagory_card, backgroundColor: isDarkMode ? 'black' : 'grey', borderWidth: 1, borderColor: 'white' }} >
 
-                                        <Image source={item.image} style={styles.catagorgy_card_image} />
+                                        <Image source={ item.image } style={styles.catagorgy_card_image} />
 
                                         <View style={{ height: '20%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
                                             <Text style={checkIndex === item.id ? { ...styles.selected_catagorgy_card_text } : { ...styles.catagorgy_card_text, color: isDarkMode ? 'white' : 'white' }} > {item.name} </Text>
@@ -101,14 +118,14 @@ export default function Home_Screen({ navigation }) {
                                 style={{ marginLeft: '1.5%', marginBottom: 10 }}
                                 horizontal={true}
                                 showsHorizontalScrollIndicator={false}
-                                data={deliveryData}
+                                data={products.slice(0,10)}
                                 keyExtractor={(item, index) => index.toString()}
                                 renderItem={({ item, index }) => (
                                     <View>
                                         <Offer_Card
-                                            Prd_Image={item.image}
+                                            Prd_Image={item.imageUrl}
                                             Prd_Price={item.price}
-                                            Prd_Name={item.name}
+                                            Prd_Name={item.title}
                                             onPressOffer_Card={() => { cardPressed(item) }}
                                         />
                                     </View>

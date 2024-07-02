@@ -36,13 +36,13 @@ export default function Home_Header({ navigation, cartIconPress, onLogoutPress }
                     size={32}
                     onPress={cartIconPress}
                 />
-                 <Icon
+                 {/* <Icon
                     type="material-community"
                     name="close-circle"
                     color='white'
                     size={32}
                     onPress={onLogoutPress}
-                />
+                /> */}
             </View>
         </View>
 

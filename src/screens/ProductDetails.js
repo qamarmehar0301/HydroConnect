@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, ScrollView, Image, TouchableOpacity, Alert } fr
 import Header from "../component/Header";
 import { useTheme } from "../component/DarkTheme";
 import { colors } from "../global/styles";
-import {useToast}  from "react-native-toast-notifications";
+import { useToast } from "react-native-toast-notifications";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../component/cart/cart_Action";
 
@@ -16,13 +16,13 @@ export default function Product_Details({ route, navigation }) {
 
     const handleAddToCart = (product) => {
         dispatch(addToCart(product));
-        
+
         toast.show('Product added to cart successfully!', {
             type: 'success',
             placement: 'bottom',
             duration: 1500,
-            style: {...styles.toastContainer, backgroundColor: isDarkMode? '#ffffff' : '#000000'},
-            textStyle: {color: isDarkMode? '#000000'  : '#ffffff' },
+            style: { ...styles.toastContainer, backgroundColor: isDarkMode ? '#ffffff' : '#000000' },
+            textStyle: { color: isDarkMode ? '#000000' : '#ffffff' },
         });
 
         // navigation.navigate('Handle_Cart');
@@ -30,22 +30,22 @@ export default function Product_Details({ route, navigation }) {
 
     return (
         <View style={[styles.container, { backgroundColor: isDarkMode ? '#000000' : 'white' }]}>
-            <ScrollView stickyHeaderIndices={[0]}>
+            <ScrollView stickyHeaderIndices={[0]} style={{flex: 1}}>
                 <View>
                     <Header title="Product Details" navigation={navigation} />
                 </View>
                 <TouchableOpacity style={styles.imageContainer}>
                     <Image
-                        source={{ uri: productData.image }}
+                        source={{ uri: productData.imageUrl }}
                         //source={{ uri: "https://shorturl.at/Aprqt" }}
                         style={styles.image} />
                 </TouchableOpacity>
                 <View style={styles.infoContainer}>
-                    <Text style={[styles.title, { color: isDarkMode ? 'white' : 'black' }]}>{productData.name}</Text>
+                    <Text style={[styles.title, { color: isDarkMode ? 'white' : 'black' }]}>{productData.title}</Text>
                     <Text style={[styles.price, { color: isDarkMode ? 'white' : 'black' }]}>Rs: {productData.price.toString()}</Text>
                 </View>
                 <View style={styles.categoryContainer}>
-                    <Text style={[styles.text, { color: isDarkMode ? 'white' : 'black' }]}>{productData.tagline} </Text>
+                    <Text style={[styles.text, { color: isDarkMode ? 'white' : 'black' }]}>{productData.tagLine} </Text>
                 </View>
                 <View style={styles.categoryContainer}>
                     <Text style={[styles.categoryTitle, { color: isDarkMode ? 'white' : 'black' }]}>Category: </Text>
@@ -53,18 +53,18 @@ export default function Product_Details({ route, navigation }) {
                 </View>
                 <View style={styles.quantityContainer}>
                     <Text style={[styles.quantityTitle, { color: isDarkMode ? 'white' : 'black' }]}>Available Stock: </Text>
-                    <Text style={[styles.quantity, { color: isDarkMode ? 'white' : colors.theme }]}>{productData.stock} </Text>
+                    <Text style={[styles.quantity, { color: isDarkMode ? 'white' : colors.theme }]}>{productData.quantity} </Text>
                 </View>
                 <View style={styles.descriptionContainer}>
                     <Text style={[styles.descriptionTitle, { color: isDarkMode ? 'white' : 'black' }]}>Description: </Text>
                     <Text style={[styles.descriptionText, { color: isDarkMode ? 'white' : 'black' }]}>{productData.description}</Text>
                 </View>
-                <View style={styles.addbuttonContainer}>
-                    <TouchableOpacity style={[styles.addbutton, {backgroundColor: isDarkMode ? '#ffffff' : colors.theme}]} onPress={() => handleAddToCart(productData)}>
-                        <Text style={[styles.buttonText,{color: isDarkMode ? '#000000' : '#ffffff'}]}>Add to Cart</Text>
-                    </TouchableOpacity>
-                </View>
             </ScrollView>
+            <View style={styles.addbuttonContainer}>
+                <TouchableOpacity style={[styles.addbutton, { backgroundColor: isDarkMode ? '#ffffff' : colors.theme }]} onPress={() => handleAddToCart(productData)}>
+                    <Text style={[styles.buttonText, { color: isDarkMode ? '#000000' : '#ffffff' }]}>Add to Cart</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 };
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     },
     image: {
         height: '100%',
-        width: '95%',
+        width: '100%',
     },
     infoContainer: {
         flexDirection: 'row',
@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10,
+        marginBottom: 10
     },
     addbutton: {
         width: '90%',

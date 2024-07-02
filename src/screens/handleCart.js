@@ -86,12 +86,12 @@ export default function Handle_Cart({ navigation }) {
                                         <View style={{ flex: 1, backgroundColor: 'white' }}>
                                             <View style={styles.cart_container}>
                                                 <View style={styles.cart_img_con}>
-                                                    <Image style={styles.image} source={{ uri: currentItem.image }} />
+                                                    <Image style={styles.image} source={{ uri: currentItem.imageUrl }} />
                                                 </View>
                                                 <View style={[styles.cart_det_con,]}>
                                                     <View style={{ marginTop: '10%', alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', width: '85%' }}>
                                                         <View>
-                                                            <Text style={styles.cart_prd}>{currentItem.name} </Text>
+                                                            <Text style={styles.cart_prd}>{currentItem.title} </Text>
                                                         </View>
                                                         <View>
                                                             <Icon
@@ -104,7 +104,7 @@ export default function Handle_Cart({ navigation }) {
                                                         </View>
                                                     </View>
                                                     <View >
-                                                        <Text style={styles.cart_tag}>{currentItem.tagline}</Text>
+                                                        <Text style={styles.cart_tag}>{currentItem.tagLine}</Text>
                                                     </View>
                                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: '40%', width: '90%', alignItems: 'center' }}>
                                                         <View>
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         height: '100%',
         width: '100%',
-        borderRadius: 90
+        borderRadius: 30
     },
     cart_det_con: {
         height: '95%',

@@ -8,7 +8,7 @@ import {filterData} from '../global/data';
 import { filter } from 'lodash';
 import { useTheme } from "./DarkTheme";
 
-export default function Search_Component() {
+export default function Search_Component({serach_Now}) {
 
     const navigation = useNavigation();
     const [filteredData, setFilteredData] = useState([...filterData]);
@@ -102,7 +102,7 @@ export default function Search_Component() {
                                     onPress={() => {
                                         Keyboard.dismiss();
                                         // navigation.navigate('Search_Result', { item: item.name });
-                                        Alert.alert('ok')
+                                        {serach_Now(item.name)}
                                         setModalVisible(false);
                                         setTextInputFocussed(false);
                                     }}

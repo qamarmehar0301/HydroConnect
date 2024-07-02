@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, FlatList, TouchableWithoutFeedback, ImageBackground, Dimensions } from 'react-native';
+import { Text, View, StyleSheet, FlatList, TouchableWithoutFeedback, ImageBackground, Dimensions, Alert } from 'react-native';
 import Search_Component from "../../component/Search_Component";
 import { colors } from "../../global/styles";
 import { filterData } from "../../global/data";
@@ -17,9 +17,14 @@ export default function Search_Screen({ navigation }) {
         navigation.navigate('Catagory Product', { Prd_Catagory: cat_name });
     }
 
+    const searchPressed = (data) => {
+        const cat_name = data;
+        navigation.navigate('Catagory Product', { Prd_Catagory: cat_name });
+    }
+
     return (
         <View style={styles.container}>
-            <Search_Component />
+            <Search_Component serach_Now={searchPressed}/>
 
             <FlatList
                 style={styles.flatList}
